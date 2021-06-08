@@ -1,0 +1,36 @@
+.footer {
+	// padding-top: 4rem;
+	// padding: 3rem 0;
+	background-color: $footer-color;
+	color: $white-color;
+
+	.box-footer {
+		&__title {
+			font-size: 1.6rem;
+			text-transform: uppercase;
+		}
+
+		.list-footer {
+			margin-top: 2rem;
+			font-size: 1.3rem;
+			color: $aaa-color;
+
+			&__item + .list-footer__item {
+				margin-top: 1.2rem;
+			}
+
+			&__item {
+				.icon-footer {
+					margin-right: 5px;
+				}
+
+				a {
+					color: $aaa-color;
+					&:hover {
+						color: $blue-main-color;
+					}
+				}
+			}
+		}
+	}
+}

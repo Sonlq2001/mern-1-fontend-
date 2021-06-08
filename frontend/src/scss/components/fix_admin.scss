@@ -1,0 +1,82 @@
+@import "./../abstracts/variables";
+@import "./../abstracts/mixins";
+
+.wrap-main {
+	min-height: 90vh;
+
+	.sidebar-link {
+		background-color: transparent !important;
+		opacity: 0.6 !important;
+	}
+
+	.sidebar-link.active {
+		background-color: #27a9e3 !important;
+		opacity: 1 !important;
+	}
+}
+.img-cate {
+	width: 64px;
+	height: 70px;
+}
+.img-slide {
+	width: 300px;
+	height: 100px;
+}
+
+.fix-alert {
+	position: fixed;
+	right: 3rem;
+	bottom: 0rem;
+	animation: fadeMessage linear 1s;
+}
+
+@keyframes fadeMessage {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+		bottom: 10rem;
+	}
+}
+
+.loading,
+.loading-admin {
+	position: fixed;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	background: rgba(255, 255, 255, 0.8);
+	.loading__round {
+		@include position("center");
+		width: 3rem;
+		height: 3rem;
+		border-radius: 100%;
+		border: 3px solid $eee-color;
+		border-top: 3px solid $blue-main-color;
+		animation: loading linear 0.5s infinite;
+	}
+}
+
+.loading-admin {
+	left: 200px;
+}
+
+@keyframes loading {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+.img-product {
+	width: 200px;
+	height: 200px;
+}
+
+.ql-editor {
+	height: 150px;
+}

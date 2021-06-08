@@ -1,0 +1,74 @@
+.bgr {
+	background-color: $eee-color;
+	padding-top: 2rem;
+	padding-bottom: 5rem;
+	margin: 0;
+
+	.all-product {
+		background-color: #fff;
+		padding: 1.5rem;
+
+		.group-control {
+			padding-bottom: 1rem;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			border-bottom: 1px dashed $aaa-color;
+
+			.breadcrumb-list {
+				display: flex;
+				font-size: 1.3rem;
+				margin: 0;
+
+				.break {
+					margin: 0 1rem;
+				}
+			}
+
+			.control-box {
+				font-size: 1.3rem;
+				box-shadow: 0 2px 5px $aaa-color;
+
+				.sort-price {
+					width: 20rem;
+					position: relative;
+
+					&__title {
+						display: flex;
+						justify-content: space-between;
+						padding: 0.5rem 1rem;
+						cursor: pointer;
+
+						i {
+							margin-top: 4px;
+						}
+					}
+
+					&__sub {
+						position: absolute;
+						background-color: $white-color;
+						box-shadow: 0 2px 4px #ccc;
+						width: 100%;
+						padding: 0.5rem 1rem;
+						border-top: 1px solid #eee;
+						line-height: 2.5rem;
+						display: none;
+
+						.ascending,
+						.decrease {
+							cursor: pointer;
+							display: block;
+							&:hover {
+								color: $blue-main-color;
+							}
+						}
+					}
+
+					&:hover .sort-price__sub {
+						display: block;
+					}
+				}
+			}
+		}
+	}
+}

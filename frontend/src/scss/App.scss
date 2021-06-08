@@ -1,0 +1,19 @@
+@import "./abstracts/variables";
+@import "./abstracts/mixins";
+@import "./base/reset";
+
+// layout
+@import "./layouts/header";
+@import "./layouts/footer";
+
+// component
+@import "./components/row_product";
+@import "./components/box_product";
+@import "./components/pagination";
+
+// page
+@import "./pages/home";
+@import "./pages/product";
+@import "./pages/detail_product";
+@import "./pages/Authentication/sign_in";
+@import "./pages/card";

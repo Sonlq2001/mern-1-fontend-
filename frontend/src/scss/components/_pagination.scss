@@ -1,0 +1,37 @@
+.pagination-group {
+	margin: 3rem 0;
+
+	.pagination-list {
+		display: flex;
+		justify-content: center;
+		margin: 0;
+
+		.pagination-item + .pagination-item {
+			margin-left: 1rem;
+		}
+
+		.pagination-page {
+			display: block;
+			text-align: center;
+			width: 4rem;
+			height: 3.2rem;
+			line-height: 3rem;
+			border: 1px solid $bbb-color;
+			font-size: 1.4rem;
+			color: $blue-main-color;
+
+			&:hover {
+				background-color: $eee-color;
+			}
+		}
+
+		.pagination-page.active {
+			background-color: $blue-2;
+			color: $white-color;
+			&:hover {
+				background-color: $blue-2;
+				color: $white-color;
+			}
+		}
+	}
+}
