@@ -74,6 +74,26 @@ const Aside = (props) => {
 									<span className="hide-menu">Comment</span>
 								</Link>
 							</li>
+							<li className="sidebar-item">
+								<Link
+									to="/admin/user"
+									className="sidebar-link waves-effect waves-dark sidebar-link"
+									aria-expanded="false"
+								>
+									<i className="fas fa-users-cog"></i>
+									<span className="hide-menu">User</span>
+								</Link>
+							</li>
+							<li className="sidebar-item">
+								<Link
+									to="/admin/order"
+									className="sidebar-link waves-effect waves-dark sidebar-link"
+									aria-expanded="false"
+								>
+									<i className="fas fa-cart-arrow-down"></i>
+									<span className="hide-menu">Order</span>
+								</Link>
+							</li>
 						</ul>
 					</nav>
 					{/* End Sidebar navigation */}

@@ -1,10 +1,9 @@
 import React from "react";
-import PropTypes from "prop-types";
-import { ErrorMessage, useField } from "formik";
+import { ErrorMessage } from "formik";
 
 const FileField = (props) => {
-	const { field, form, type, label } = props;
-	const { name, value, onBlur } = field;
+	const { field, form, type, label, classLabel, className } = props;
+	const { name, onBlur } = field;
 
 	const changeImageUrl = (e) => {
 		const newImageUrl = e.target.files[0];
@@ -14,10 +13,14 @@ const FileField = (props) => {
 	return (
 		<>
 			<div className="form-group">
-				{label && <label htmlFor="">Ảnh</label>}
+				{label && (
+					<label htmlFor="" className={classLabel && classLabel}>
+						Ảnh
+					</label>
+				)}
 				<input
 					type={type}
-					className="form-control"
+					className={className && className}
 					// value={value}
 					onChange={changeImageUrl}
 					onBlur={onBlur}
@@ -31,9 +34,5 @@ const FileField = (props) => {
 		</>
 	);
 };
-
-// FileField.propTypes = {
-
-// }
 
 export default FileField;

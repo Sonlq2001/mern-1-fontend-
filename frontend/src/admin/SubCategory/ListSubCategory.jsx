@@ -1,7 +1,5 @@
-import React, { useEffect } from "react";
-// import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
 
 import { fetchCategory } from "./../../redux/actions/categoryAction";
 import {
@@ -10,84 +8,99 @@ import {
 } from "./../../redux/actions/subCategoryAction";
 import Loading from "./../../components/Loading";
 import TableSubCategory from "./TableSubCategory";
-const ListSubCategory = (props) => {
-	const {
-		categories: { data: listCate },
-		subCategories: { data, loading },
-	} = useSelector((state) => state);
-	const dispatch = useDispatch();
+import HeaderTable from "./../common/HeaderTable";
+import NotFoundAdmin from "./../common/NotFoundAdmin";
+import PaginationList from "./../common/PaginationList";
 
+const ListSubCategory = ({
+	listCategory,
+	listSubCategory,
+	fetchSubCategory,
+	fetchCategory,
+	removeSubCategory,
+}) => {
+	const [currentPage, setCurrentPage] = useState(1);
+	const limit = 6;
+	const [valueSearch, setValueSearch] = useState("");
 	useEffect(() => {
-		dispatch(fetchCategory());
-		dispatch(fetchSubCategory());
-	}, [dispatch]);
+		fetchCategory();
+		fetchSubCategory();
+	}, []);
+
+	const { data: dataCategory } = listCategory;
+	const { data: dataSubCategory, loading } = listSubCategory;
 
 	if (loading) {
 		return <Loading loading_admin="loading-admin" />;
-	} else if (data.length > 0) {
+	} else if (dataCategory.length > 0 && dataSubCategory.length > 0) {
+		// xóa
 		const handleRemove = (id) => {
 			if (window.confirm("Bạn thực sự muốn xóa !")) {
-				dispatch(removeSubCategory(id));
+				removeSubCategory(id);
 			}
 		};
 
+		// pagination
+		const end = currentPage * limit;
+		const start = end - limit;
+		const dataSlice = dataSubCategory.slice(start, end);
+		const paginate = (page) => setCurrentPage(page);
+		const plus = () => setCurrentPage(currentPage + 1);
+		const minus = () => setCurrentPage(currentPage - 1);
+
+		// handle search
+		const handleSearch = (e) => {
+			setValueSearch(e.target.value);
+		};
+		// filter item
+		const filterItem = dataSlice.filter((item) => {
+			return item.name.toLowerCase().includes(valueSearch.toLowerCase());
+		});
+
 		return (
 			<>
-				<div className="row bg-white pt-3">
-					<h4 className="page-title mb-4">Danh sách slide</h4>
+				<HeaderTable
+					title="Danh sách danh mục con"
+					path="/admin/action-subcategory"
+					handleSearch={handleSearch}
+				/>
 
-					<div className="row">
-						<div className="col col-lg-2">
-							<input
-								type="text"
-								className="form-control "
-								placeholder="Tìm kiếm"
-							/>
-						</div>
-						<div className="col col-lg-2">
-							{/* <select
-								className="form-select"
-								aria-label="Default select example"
-								value={""}
-							>
-								<option value="" selected>
-									Xắp xếp theo
-								</option>
-								<option key={1} value={1}>
-									One
-								</option>
-							</select> */}
-						</div>
-						<div className="col col-lg-8 text-end">
-							<Link
-								to="/admin/action-subcategory"
-								className="btn btn-info"
-							>
-								<i className="fas fa-plus"></i>Thêm
-							</Link>
-						</div>
-					</div>
-				</div>
-				<div className="row bg-white">
+				<div className="row bg-white fs-5">
 					<div className="col col-lg-12">
-						{/* <div className="card-body">
-							<h5 className="card-title mb-0">Static Table</h5>
-						</div> */}
-
 						<TableSubCategory
-							subCategories={data}
-							categories={listCate}
+							subCategories={filterItem}
+							categories={dataCategory}
 							handleRemove={handleRemove}
 						/>
 					</div>
+
+					<PaginationList
+						total={dataSubCategory.length}
+						limit={limit}
+						plus={plus}
+						minus={minus}
+						paginate={paginate}
+						currentPage={currentPage}
+					/>
 				</div>
 			</>
 		);
+	} else {
+		return <NotFoundAdmin />;
 	}
 };
 
-// ListSubCategory.propTypes = {
+const mapStateToProps = (state) => {
+	return {
+		listCategory: state.categories,
+		listSubCategory: state.subCategories,
+	};
+};
 
-// }
+const mapActionToProps = {
+	fetchCategory,
+	fetchSubCategory,
+	removeSubCategory,
+};
 
-export default ListSubCategory;
+export default connect(mapStateToProps, mapActionToProps)(ListSubCategory);

@@ -10,3 +10,39 @@
 		transform: translate(-50%, -50%);
 	}
 }
+
+// responsive
+@mixin pc-larger {
+	// 1399.98px
+	@media (max-width: 87.499rem) {
+		@content;
+	}
+}
+
+@mixin pc {
+	// 1199.98px
+	@media (max-width: 74.999rem) {
+		@content;
+	}
+}
+
+@mixin tablet {
+	// 991.98px
+	@media (max-width: 61.999rem) {
+		@content;
+	}
+}
+
+@mixin mobile {
+	// 767.98px
+	@media (max-width: 47.999rem) {
+		@content;
+	}
+}
+
+@mixin mobile-less {
+	// 575.98px
+	@media (max-width: 35.999rem) {
+		@content;
+	}
+}

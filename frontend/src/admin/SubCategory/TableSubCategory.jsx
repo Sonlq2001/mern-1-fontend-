@@ -1,12 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 // import PropTypes from 'prop-types'
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 
-const TableSubCategory = ({ subCategories, categories, handleRemove }) => {
+import { setCheckbox } from "./../../redux/actions/subCategoryAction";
+
+const TableSubCategory = ({
+	subCategories,
+	categories,
+	handleRemove,
+	setCheckbox,
+}) => {
+	const [listCheckbox, setListCheckbox] = useState([]);
+	const handleCheckbox = (id) => {
+		const findIndex = listCheckbox.indexOf(id);
+		if (findIndex > -1) {
+			listCheckbox.splice(findIndex, 1);
+		} else {
+			setListCheckbox([...listCheckbox, id]);
+		}
+	};
+
 	return (
 		<table className="table table-bordered mt-5">
 			<thead>
 				<tr>
+					<th scope="col">
+						<input type="checkbox" />
+					</th>
 					<th scope="col">#</th>
 					<th scope="col">Danh mục cha</th>
 					<th scope="col">Danh mục con</th>
@@ -24,6 +45,12 @@ const TableSubCategory = ({ subCategories, categories, handleRemove }) => {
 
 					return (
 						<tr key={subCate._id}>
+							<th scope="row">
+								<input
+									type="checkbox"
+									onChange={() => handleCheckbox(subCate._id)}
+								/>
+							</th>
 							<th scope="row">{index + 1}</th>
 							<td>
 								<b>{nameCate}</b>
@@ -33,13 +60,13 @@ const TableSubCategory = ({ subCategories, categories, handleRemove }) => {
 							<td>
 								<Link
 									to={`/admin/action-subcategory/${subCate._id}`}
-									className="btn btn-primary me-3"
+									className="btn btn-primary me-3 fs-5"
 								>
 									Sửa
 								</Link>
 								<button
 									onClick={() => handleRemove(subCate._id)}
-									className="btn btn-danger"
+									className="btn btn-danger fs-5"
 								>
 									Xóa
 								</button>
@@ -52,8 +79,8 @@ const TableSubCategory = ({ subCategories, categories, handleRemove }) => {
 	);
 };
 
-// TableSubCategory.propTypes = {
+const mapActionToProps = {
+	setCheckbox,
+};
 
-// }
-
-export default TableSubCategory;
+export default connect(null, mapActionToProps)(TableSubCategory);

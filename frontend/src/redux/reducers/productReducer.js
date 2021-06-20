@@ -34,10 +34,34 @@ export const productReducer = (state = initialState, action) => {
 					prd._id === payload._id ? payload : prd
 				),
 			};
+
+		case typeAction.LOW_TO_HIGHT:
+			return {
+				...state,
+				data: state.data.sort((item1, item2) => {
+					return item1.price - item2.price;
+				}),
+			};
+
+		case typeAction.HIGHT_TO_LOW:
+			return {
+				...state,
+				data: state.data.sort(
+					(item1, item2) => item2.price - item1.price
+				),
+			};
+
+		case typeAction.FILTER_CATE:
+			return {
+				...state,
+				data: state.data.filter((prd) => prd.cateId === payload),
+			};
 		default:
 			return state;
 	}
 };
+
+// chi tiết sản phẩm
 
 const initialStateDetail = {
 	data: {},

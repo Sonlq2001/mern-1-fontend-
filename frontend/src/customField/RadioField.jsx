@@ -1,12 +1,8 @@
 import React from "react";
-import PropTypes from "prop-types";
-import { useField } from "formik";
+import Formik, { useField } from "formik";
 
 const RadioField = (props) => {
-	// const [field, meta] = useField(props);
-	const { field, form } = props;
-	const { name, value, onChange, onBlur } = field;
-
+	const [field, meta] = useField(props);
 	return (
 		<>
 			<div className="group-form">
@@ -29,9 +25,5 @@ const RadioField = (props) => {
 		</>
 	);
 };
-
-// RadioField.propTypes = {
-
-// }
 
 export default RadioField;

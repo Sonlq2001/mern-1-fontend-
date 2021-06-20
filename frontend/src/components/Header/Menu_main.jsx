@@ -1,33 +1,37 @@
 import React, { useEffect } from "react";
 // import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { connect, useSelector, useDispatch } from "react-redux";
 
 import { fetchSlide } from "./../../redux/actions/slideAction";
 import { fetchCategory } from "./../../redux/actions/categoryAction";
 import { fetchSubCategory } from "./../../redux/actions/subCategoryAction";
 
-import icon_laptop from "./../../assets/images/icon-laptop.png";
-import slide1 from "./../../assets/images/slide-1.png";
-import slide2 from "./../../assets/images/slide-2.png";
 import banner1 from "./../../assets/images/banner-1.jpg";
 import banner2 from "./../../assets/images/banner-2.jpg";
 
-function Menu_main(props) {
-	const { slides, categories, subCategories } = useSelector((state) => state);
-	const dispatch = useDispatch();
-
+function Menu_main({
+	listSlide,
+	listCategory,
+	listSubCategory,
+	fetchSlide,
+	fetchCategory,
+	fetchSubCategory,
+}) {
 	useEffect(() => {
-		dispatch(fetchSlide());
-		dispatch(fetchCategory());
-		dispatch(fetchSubCategory());
+		fetchSlide();
+		fetchCategory();
+		fetchSubCategory();
 	}, []);
 
+	const { data: dataSlide } = listSlide;
+	const { data: dataCategory } = listCategory;
+	const { data: dataSubCategory } = listSubCategory;
 	return (
 		<>
 			<div className="menu-main">
 				<ul className="list-menu">
-					{categories.data.map((cate) => {
+					{dataCategory.map((cate) => {
 						return (
 							<li className="item-menu" key={cate._id}>
 								<Link
@@ -43,8 +47,8 @@ function Menu_main(props) {
 								</Link>
 
 								<ul className="sub-menu">
-									{subCategories.data.map((subCate) => {
-										if (subCate.cateId == cate._id) {
+									{dataSubCategory.map((subCate) => {
+										if (subCate.cateId === cate._id) {
 											return (
 												<li
 													className="sub-menu__item"
@@ -58,6 +62,8 @@ function Menu_main(props) {
 													</Link>
 												</li>
 											);
+										} else {
+											return false;
 										}
 									})}
 								</ul>
@@ -73,7 +79,7 @@ function Menu_main(props) {
 						data-bs-ride="carousel"
 					>
 						<div className="carousel-inner">
-							{slides.data.map((slide, index) => {
+							{dataSlide.map((slide, index) => {
 								return (
 									<div
 										className={`carousel-item active`}
@@ -81,7 +87,7 @@ function Menu_main(props) {
 									>
 										<img
 											src={`http://localhost:4000/api/slide/img/${slide._id}`}
-											className="d-block w-100"
+											className="d-block w-100 img-slide-main"
 											alt="..."
 										/>
 									</div>
@@ -116,14 +122,14 @@ function Menu_main(props) {
 				</div>
 
 				<div className="nav-banner">
-					<a href="" className="nav-banner__box">
+					<a href="/#" className="nav-banner__box">
 						<img
 							src={banner1}
 							alt=""
 							className="nav-banner__box-img"
 						/>
 					</a>
-					<a href="" className="nav-banner__box">
+					<a href="/#" className="nav-banner__box">
 						<img
 							src={banner2}
 							alt=""
@@ -136,6 +142,17 @@ function Menu_main(props) {
 	);
 }
 
-// Menu_main.propTypes = {};
+const mapStateToProps = (state) => {
+	return {
+		listSlide: state.slides,
+		listCategory: state.categories,
+		listSubCategory: state.subCategories,
+	};
+};
 
-export default Menu_main;
+const mapActionToProps = {
+	fetchSlide,
+	fetchCategory,
+	fetchSubCategory,
+};
+export default connect(mapStateToProps, mapActionToProps)(Menu_main);

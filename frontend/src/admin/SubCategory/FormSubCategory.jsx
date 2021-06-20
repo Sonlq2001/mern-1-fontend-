@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 // import PropTypes from "prop-types";
-import { Formik, Form, FastField } from "formik";
+import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { useHistory, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { connect } from "react-redux";
 
 import { fetchCategory } from "./../../redux/actions/categoryAction";
 import {
@@ -15,28 +15,29 @@ import Loading from "./../../components/Loading";
 import InPutField from "./../../customField/InputField";
 import SelectField from "./../../customField/SelectField";
 
-const FormSubCategory = (props) => {
+const FormSubCategory = ({
+	listCategory,
+	listSubCate,
+	fetchSubCategory,
+	fetchCategory,
+	addSubCategory,
+	updateSubCategory,
+}) => {
 	let history = useHistory();
-	const dispatch = useDispatch();
 	const { id } = useParams();
 
-	const {
-		categories: { data },
-		subCategories: { data: listSubCate, loading },
-	} = useSelector((state) => state);
-
 	useEffect(() => {
-		dispatch(fetchCategory());
-		dispatch(fetchSubCategory());
+		fetchCategory();
+		fetchSubCategory();
 	}, []);
 
-	// console.log(initialValues);
-	// convert
+	const { data: dataCategory } = listCategory;
+	const { data: dataSubCategory, loading } = listSubCate;
 
 	if (loading) {
 		return <Loading />;
 	} else {
-		const convertCate = data.map((cate) => {
+		const convertCate = dataCategory.map((cate) => {
 			return {
 				value: cate._id,
 				label: cate.name,
@@ -45,7 +46,7 @@ const FormSubCategory = (props) => {
 
 		let initialValues;
 		if (id) {
-			const subCateEdit = listSubCate.find(
+			const subCateEdit = dataSubCategory.find(
 				(subCate) => subCate._id === id
 			);
 			initialValues = {
@@ -61,10 +62,10 @@ const FormSubCategory = (props) => {
 					initialValues={initialValues}
 					onSubmit={async (values) => {
 						if (id === undefined) {
-							dispatch(addSubCategory(values));
+							addSubCategory(values);
 							history.push("/admin/subcategory");
 						} else {
-							dispatch(updateSubCategory(id, values));
+							updateSubCategory(id, values);
 							history.push("/admin/subcategory");
 						}
 					}}
@@ -83,9 +84,22 @@ const FormSubCategory = (props) => {
 								<div className="row bg-white">
 									<div className="col col-lg-12 pt-3">
 										<div className="card-body">
-											<h4 className="card-title">
-												Thêm danh mục con
-											</h4>
+											{id && (
+												<>
+													<h4 className="card-title">
+														Sửa danh mục con:
+														<mark className="ms-3">
+															{initialValues.name}
+														</mark>
+													</h4>
+												</>
+											)}
+
+											{!id && (
+												<h4 className="card-title">
+													Thêm danh mục con
+												</h4>
+											)}
 										</div>
 									</div>
 								</div>
@@ -96,22 +110,31 @@ const FormSubCategory = (props) => {
 												label="Danh mục cha"
 												name="cateId"
 												options={convertCate}
-												classLabel=""
+												classLabel="fs-5"
 											/>
 											<InPutField
 												label="Tên danh mục con"
 												type="text"
 												name="name"
 												placeholder="Tên"
-												className="form-control"
+												className="form-control fs-5"
+												classLabel="fs-5"
 											/>
 										</div>
 									</div>
 									<div className="col col-lg-12">
 										<div className="card-body">
-											<button className="btn btn-info">
-												Thêm danh mục
-											</button>
+											{id && (
+												<button className="btn btn-info fs-5">
+													Sửa danh mục
+												</button>
+											)}
+
+											{!id && (
+												<button className="btn btn-info fs-5">
+													Thêm danh mục
+												</button>
+											)}
 										</div>
 									</div>
 								</Form>
@@ -124,8 +147,18 @@ const FormSubCategory = (props) => {
 	}
 };
 
-// AddCategory.propTypes = {
+const mapStateToProps = (state) => {
+	return {
+		listCategory: state.categories,
+		listSubCate: state.subCategories,
+	};
+};
 
-// }
+const mapActionToProps = {
+	fetchCategory,
+	fetchSubCategory,
+	addSubCategory,
+	updateSubCategory,
+};
 
-export default FormSubCategory;
+export default connect(mapStateToProps, mapActionToProps)(FormSubCategory);

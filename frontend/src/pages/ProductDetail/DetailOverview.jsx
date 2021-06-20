@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 
 import DetailLeft from "./DetailLeft";
 import DetailRight from "./DetailRight";
@@ -23,9 +22,5 @@ const DetailOverview = ({ product }) => {
 		</>
 	);
 };
-
-// DetailOverview.propTypes = {
-
-// }
 
 export default DetailOverview;

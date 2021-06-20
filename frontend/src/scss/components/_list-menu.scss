@@ -1,0 +1,100 @@
+@import "./../abstracts/variables";
+@import "./../abstracts/mixins";
+
+.nav-cate {
+	@include tablet {
+		display: none;
+	}
+}
+
+// fixed
+.list-menu {
+	width: 23%;
+	height: 100%;
+	background-color: $blue-main-color;
+
+	@include tablet {
+		display: none;
+	}
+
+	.item-menu + .item-menu {
+		border-top: 0.5px solid $blue-2;
+	}
+	.path-menu {
+		color: $white-color;
+		display: block;
+		padding: 1rem 1.8rem;
+		font-size: 1.5rem;
+		text-transform: uppercase;
+		transition: ease 0.4s;
+		&:hover {
+			background-color: $blue-2;
+		}
+
+		.img-menu {
+			width: 2rem;
+			height: 2rem;
+			margin: 0 1rem 3px 0;
+		}
+	}
+
+	// sub menu
+	.item-menu {
+		position: relative;
+		.sub-menu {
+			display: none;
+			position: absolute;
+			top: 0;
+			left: 100%;
+			z-index: 4000;
+			background-color: $blue-main-color;
+			width: 250px;
+			height: auto;
+			border-left: 0.5px solid $blue-2;
+
+			.sub-menu__item + .sub-menu__item {
+				border-top: 0.5px solid $blue-2;
+			}
+			.link-sub-menu {
+				display: block;
+				padding: 1rem 1.8rem;
+				color: $white-color;
+				font-size: 1.5rem;
+			}
+		}
+
+		&:hover .sub-menu {
+			display: block;
+		}
+	}
+}
+// when scroll y
+.nav-cate.active {
+	cursor: pointer;
+	position: relative;
+}
+
+.nav-cate.active:hover .list-move {
+	display: block;
+}
+
+.list-move {
+	display: none;
+	width: 25.8rem;
+	position: absolute;
+	top: 45px;
+	left: 0;
+
+	.path-menu {
+		padding: 0 1.8rem;
+	}
+
+	.item-menu {
+		.sub-menu {
+			border-top: 0.5px solid $blue-2;
+			.link-sub-menu {
+				padding: 0 1.8rem;
+			}
+		}
+	}
+}

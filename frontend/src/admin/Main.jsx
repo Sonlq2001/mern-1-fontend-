@@ -1,10 +1,7 @@
 import "./../scss/components/fix_admin.scss";
 
-import React, { useEffect } from "react";
-// import PropTypes from "prop-types";
+import React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
-// import { useDispatch } from "react-redux";
-// import { fetchProduct } from "./../redux/actions/productAction";
 
 import Header from "./Header/Header";
 import Aside from "./Aside/Aside";
@@ -26,12 +23,15 @@ import ListSubCategory from "./SubCategory/ListSubCategory";
 import FormSubCategory from "./SubCategory/FormSubCategory";
 
 import ListComment from "./Comment/ListComment";
+import DetailComment from "./Comment/DetailComment";
+
+import ListUser from "./User/ListUser";
+import FormUser from "./User/FormUser";
+
+import ListOrder from "./Order/ListOrder";
+import DetailOrder from "./Order/DetailOrder";
 
 const Main = (props) => {
-	// const dispatch = useDispatch();
-	// useEffect(() => {
-	// 	dispatch(fetchProduct());
-	// }, [dispatch]);
 	return (
 		<>
 			<Router>
@@ -120,8 +120,35 @@ const Main = (props) => {
 
 							{/* comment */}
 							<Route
+								exact
 								path="/admin/comment"
 								component={ListComment}
+							/>
+							<Route
+								exact
+								path="/admin/comment/:id"
+								component={DetailComment}
+							/>
+
+							{/* user */}
+							<Route path="/admin/user" component={ListUser} />
+							<Route
+								path="/admin/add-user"
+								component={FormUser}
+							/>
+							<Route
+								path="/admin/edit-user/:id"
+								component={FormUser}
+							/>
+							{/* order */}
+							<Route
+								exact
+								path="/admin/order"
+								component={ListOrder}
+							/>
+							<Route
+								path="/admin/order/:id"
+								component={DetailOrder}
 							/>
 
 							{/* </Switch> */}

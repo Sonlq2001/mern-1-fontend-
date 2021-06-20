@@ -1,6 +1,6 @@
-import React, { useContext } from "react";
+import React from "react";
 // import PropTypes from "prop-types";
-import { useDispatch, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import { Formik, Form, FastField } from "formik";
 import * as Yup from "yup";
 import { useHistory } from "react-router-dom";
@@ -9,9 +9,9 @@ import { addSlide } from "./../../redux/actions/slideAction";
 import InPutField from "./../../customField/InputField";
 import FileField from "./../../customField/FileField";
 
-const AddSlide = (props) => {
+const AddSlide = ({ addSlide }) => {
 	let history = useHistory();
-	const dispatch = useDispatch();
+
 	return (
 		<>
 			<Formik
@@ -24,14 +24,14 @@ const AddSlide = (props) => {
 					formSlide.append("path", values.path);
 					formSlide.append("photo", values.photo);
 
-					dispatch(addSlide(formSlide));
+					addSlide(formSlide);
 					history.push("/admin/slide");
 				}}
 				validationSchema={Yup.object().shape({
 					path: Yup.string().required(
 						"Vui lòng nhập đường dẫn liên kết !"
 					),
-					photo: Yup.string().required("Chưa chọn ảnh"),
+					photo: Yup.string().required("Chưa chọn ảnh !"),
 				})}
 			>
 				{(props) => {
@@ -51,23 +51,26 @@ const AddSlide = (props) => {
 									<div className="card-body">
 										<InPutField
 											label="Đường dẫn liên kết"
+											classLabel="fs-5"
 											type="text"
 											name="path"
 											placeholder="Tên"
-											className="form-control"
+											className="form-control fs-5"
 										/>
 
 										<FastField
 											component={FileField}
+											classLabel="fs-5"
 											type="file"
 											name="photo"
 											label="Ảnh"
+											className="form-control fs-5"
 										/>
 									</div>
 								</div>
 								<div className="col col-lg-12">
 									<div className="card-body">
-										<button className="btn btn-info">
+										<button className="btn btn-info fs-5">
 											Thêm
 										</button>
 									</div>
@@ -81,8 +84,4 @@ const AddSlide = (props) => {
 	);
 };
 
-// AddCategory.propTypes = {
-
-// }
-
-export default AddSlide;
+export default connect(null, { addSlide })(AddSlide);

@@ -1,0 +1,112 @@
+.group-customer {
+	background-color: $bgr-customer;
+	padding: 1.5rem 0;
+
+	// nav bar customer
+	.action-customer-path {
+		display: block;
+		padding: 1rem;
+		font-size: 1.3rem;
+		i {
+			color: gray;
+			margin-right: 2rem;
+		}
+
+		&:hover {
+			background-color: $eee-color;
+			color: $txt-color;
+		}
+	}
+	.active-action {
+		background-color: $eee-color;
+		color: $blue-main-color;
+	}
+
+	// box model
+	.title-model {
+		font: {
+			size: 1.8rem;
+			weight: 400;
+		}
+		margin-bottom: 1rem;
+	}
+	.box-model {
+		background-color: $white-color;
+		padding: 2.5rem 1.5rem;
+
+		.form-info {
+			.form-group + .form-group {
+				margin-top: 1.5rem;
+			}
+
+			.label-form {
+				font-size: 1.3rem;
+				width: 10rem;
+			}
+
+			.input-form {
+				border: 1px solid $ccc-color;
+				border-radius: 3px;
+				padding: 0.6rem 1.3rem;
+				font-size: 1.4rem;
+				width: 40rem;
+			}
+
+			.err-account {
+				margin-left: 10rem;
+			}
+
+			.msg-client-update {
+				margin-left: 10rem;
+				font-size: 1.3rem;
+				width: 40rem;
+			}
+
+			// checkbox
+			.checkbox-change {
+				margin-left: 10rem;
+				appearance: none;
+				width: 2rem;
+				height: 2rem;
+				background-color: $bgr-customer;
+				position: relative;
+
+				&::after {
+					position: absolute;
+					content: "\2713";
+					font-size: 1.3rem;
+					color: $white-color;
+					text-align: center;
+					width: 2rem;
+					height: 2rem;
+					background-color: $blue-main-color;
+					transform: scale(0);
+					transition: 0.3s;
+				}
+			}
+
+			.checkbox-change:checked::after {
+				transform: scale(1);
+			}
+
+			.label-check {
+				font: {
+					size: 1.4rem;
+					weight: 400 !important;
+				}
+				cursor: pointer;
+				margin-left: 1rem;
+				position: relative;
+				bottom: 3px;
+			}
+
+			.btn-confirm {
+				margin-left: 10rem;
+				padding: 0.8rem 2rem;
+				background-color: $blue-main-color;
+				color: $white-color;
+				font-size: 1.4rem;
+			}
+		}
+	}
+}

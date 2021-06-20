@@ -3,31 +3,26 @@ import React, { useEffect } from "react";
 import { Formik, Form, FastField } from "formik";
 import * as Yup from "yup";
 import { useHistory, useParams } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { connect } from "react-redux";
 
-import {
-	fetchSlide,
-	updateSlide,
-	fetchOne,
-} from "./../../redux/actions/slideAction";
-import slideApi from "./../../api/slideApi";
+import { fetchSlide, updateSlide } from "./../../redux/actions/slideAction";
 import Loading from "./../../components/Loading";
 import InPutField from "./../../customField/InputField";
 import FileField from "./../../customField/FileField";
 
-const EditSlide = (props) => {
+const EditSlide = ({ listSlide, fetchSlide, updateSlide }) => {
 	let history = useHistory();
 	const { id } = useParams();
-	const { data, loading } = useSelector((state) => state.slides);
-	const dispatch = useDispatch();
 	useEffect(() => {
-		dispatch(fetchSlide());
-	}, [dispatch]);
+		fetchSlide();
+	}, []);
+
+	const { data: dataSlide, loading } = listSlide;
 
 	if (loading) {
 		return <Loading />;
 	} else {
-		const slideEdit = data.find((slide) => slide._id == id);
+		const slideEdit = dataSlide.find((slide) => slide._id === id);
 		return (
 			<Formik
 				initialValues={{
@@ -41,7 +36,7 @@ const EditSlide = (props) => {
 						formSlide.append("photo", values.photo);
 					}
 
-					dispatch(updateSlide(id, formSlide));
+					updateSlide(id, formSlide);
 					history.push("/admin/slide");
 				}}
 				validationSchema={Yup.object().shape({
@@ -57,7 +52,7 @@ const EditSlide = (props) => {
 								<div className="col col-lg-12 pt-3">
 									<div className="card-body">
 										<h4 className="card-title">
-											Thêm slide
+											Thêm user
 										</h4>
 									</div>
 								</div>
@@ -70,7 +65,8 @@ const EditSlide = (props) => {
 											type="text"
 											name="path"
 											placeholder="Tên"
-											className="form-control"
+											className="form-control fs-5"
+											classLabel="fs-5"
 										/>
 
 										<FastField
@@ -78,17 +74,19 @@ const EditSlide = (props) => {
 											type="file"
 											name="photo"
 											label="Ảnh"
+											classLabel="fs-5"
+											className="form-control fs-5"
 										/>
-										{/* <img
+										<img
 											src={`http://localhost:4000/api/slide/img/${slideEdit._id}`}
 											alt=""
 											className="img-slide"
-										/> */}
+										/>
 									</div>
 								</div>
 								<div className="col col-lg-12">
 									<div className="card-body">
-										<button className="btn btn-info">
+										<button className="btn btn-info fs-5">
 											Sửa
 										</button>
 									</div>
@@ -102,8 +100,10 @@ const EditSlide = (props) => {
 	}
 };
 
-// AddCategory.propTypes = {
+const mapStateToProps = (state) => {
+	return {
+		listSlide: state.slides,
+	};
+};
 
-// }
-
-export default EditSlide;
+export default connect(mapStateToProps, { fetchSlide, updateSlide })(EditSlide);

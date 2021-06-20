@@ -1,7 +1,5 @@
-import React, { useEffect } from "react";
-// import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
 
 import {
 	fetchCategory,
@@ -9,78 +7,86 @@ import {
 } from "./../../redux/actions/categoryAction";
 import Loading from "./../../components/Loading";
 import TableCategory from "./TableCategory";
+import NotFoundAdmin from "./../common/NotFoundAdmin";
+import HeaderTable from "./../common/HeaderTable";
+import PaginationList from "./../common/PaginationList";
 
-const ListCategory = (props) => {
-	const { data, loading } = useSelector((state) => state.categories);
-	const dispatch = useDispatch();
+const ListCategory = ({ listCategory, fetchCategory, removeCategory }) => {
+	const [valueSearch, setValueSearch] = useState("");
+	const [currentPage, setCurrentPage] = useState(1);
+	const limit = 5;
 
 	useEffect(() => {
-		dispatch(fetchCategory());
-	}, [dispatch]);
+		fetchCategory();
+	}, []);
+
+	const { data: dataCategory, loading } = listCategory;
 
 	if (loading) {
 		return <Loading loading_admin="loading-admin" />;
-	} else if (data.length > 0) {
+	} else if (dataCategory.length > 0) {
+		// xóa
 		const handleRemove = (id) => {
 			if (window.confirm("Bạn thực sự muốn xóa !")) {
-				dispatch(removeCategory(id));
+				removeCategory(id);
 			}
 		};
+
+		// pagination
+		const end = currentPage * limit;
+		const start = end - limit;
+		const dataSlice = dataCategory.slice(start, end);
+		const paginate = (pageNumber) => setCurrentPage(pageNumber);
+		const plus = () => setCurrentPage(currentPage + 1);
+		const minus = () => setCurrentPage(currentPage - 1);
+
+		// tìm kiếm
+		const handleSearch = (e) => setValueSearch(e.target.value);
+		const listFilter = dataSlice.filter((cate) =>
+			cate.name.toLowerCase().includes(valueSearch.toLowerCase())
+		);
+
 		return (
 			<>
-				<div className="row bg-white pt-3">
-					<h4 className="page-title mb-4">Danh sách danh mục</h4>
-
-					<div className="row">
-						<div className="col col-lg-2">
-							<input
-								type="text"
-								className="form-control "
-								placeholder="Tìm kiếm"
-							/>
-						</div>
-						<div className="col col-lg-2">
-							{/* <select
-							className="form-select"
-							aria-label="Default select example"
-							value={""}
-						>
-							<option value="" selected>
-								Xắp xếp theo
-							</option>
-							<option key={1} value={1}>
-								One
-							</option>
-						</select> */}
-						</div>
-						<div className="col col-lg-8 text-end">
-							<Link
-								to="/admin/add-category"
-								className="btn btn-info"
-							>
-								<i className="fas fa-plus"></i>Thêm
-							</Link>
-						</div>
-					</div>
-				</div>
-				<div className="row bg-white">
+				<HeaderTable
+					title="Danh sách danh mục"
+					path="/admin/add-category"
+					handleSearch={handleSearch}
+				/>
+				<div className="row bg-white fs-5">
 					<div className="col col-lg-12">
-						{/* <div className="card-body">
-						<h5 className="card-title mb-0">Static Table</h5>
-					</div> */}
 						<TableCategory
-							data={data}
+							data={listFilter}
 							handleRemove={handleRemove}
 						/>
 					</div>
+					<PaginationList
+						total={dataCategory.length}
+						limit={5}
+						plus={plus}
+						minus={minus}
+						paginate={paginate}
+						currentPage={currentPage}
+					/>
 				</div>
 			</>
+		);
+	} else {
+		return (
+			<NotFoundAdmin
+				title="Hiện tại chưa có dữ liệu danh mục nào nào"
+				path=""
+			/>
 		);
 	}
 };
 
-// ListCategory.propTypes = {
+const mapStateToProps = (state) => {
+	return {
+		listCategory: state.categories,
+	};
+};
 
-// }
-
-export default ListCategory;
+export default connect(mapStateToProps, { fetchCategory, removeCategory })(
+	ListCategory
+);

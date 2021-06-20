@@ -1,0 +1,38 @@
+.not-found-search {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	margin-top: 5rem;
+
+	.text-not-found {
+		font-size: 1.6rem;
+		.result-search {
+			font: {
+				size: 1.7rem;
+				weight: 700;
+			}
+		}
+	}
+	.not-found-img {
+		width: 400px;
+		height: 300px;
+	}
+}
+
+.not-found-admin {
+	display: flex;
+	flex-direction: column;
+	background-color: $white-color;
+	align-items: center;
+	justify-content: center;
+	min-height: 80vh;
+
+	&__title {
+		font-size: 1.7rem;
+	}
+
+	&__img {
+		width: 300px;
+	}
+}

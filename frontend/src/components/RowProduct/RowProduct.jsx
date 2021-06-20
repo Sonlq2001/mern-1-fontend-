@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 
 import RowHeader from "./RowHeader";
 import RowBanner from "./RowBanner";
@@ -16,7 +15,5 @@ const RowProduct = ({ category }) => {
 		</>
 	);
 };
-
-RowProduct.propTypes = {};
 
 export default RowProduct;

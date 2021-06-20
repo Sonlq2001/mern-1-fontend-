@@ -4,6 +4,8 @@
 
 // layout
 @import "./layouts/header";
+@import "./components/list-menu";
+@import "./components/menu_mobile";
 @import "./layouts/footer";
 
 // component
@@ -17,3 +19,9 @@
 @import "./pages/detail_product";
 @import "./pages/Authentication/sign_in";
 @import "./pages/card";
+@import "./pages/not_found";
+@import "./pages/account";
+@import "./pages/manage_order";
+
+// admin
+@import "./pages/dashboard_admin";

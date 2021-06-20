@@ -19,6 +19,12 @@ const commentReducer = (state = initialState, action) => {
 				data: payload,
 				loading: false,
 			};
+
+		case typeAction.REMOVE_COMMENT:
+			return {
+				...state,
+				data: state.data.filter((cmt) => cmt._id !== payload._id),
+			};
 		default:
 			return state;
 	}

@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { ErrorMessage } from "formik";
 import ReactQuill from "react-quill";
 const TextareaField = (props) => {
@@ -26,9 +25,5 @@ const TextareaField = (props) => {
 		</>
 	);
 };
-
-// TextareaField.propTypes = {
-
-// }
 
 export default TextareaField;

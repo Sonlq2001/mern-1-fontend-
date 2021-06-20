@@ -1,41 +1,58 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React, { useEffect } from "react";
+import { connect } from "react-redux";
+// import { Link } from "react-router-dom";
+
+import { fetchCart } from "./../../redux/actions/cartAction";
 
 import TableCart from "./TableCart";
 import FormPay from "./FormPay";
+import { isAuthenticated } from "./../../pages/Authentication/index";
+import CartNotFound from "./CartNotFound";
+import Loading from "./../../components/Loading";
 
-const Pay = (props) => {
-	return (
-		<>
-			<div className="main bgr">
-				<div className="container">
-					<div className="all-product">
-						<div className="group-control">
-							<ul className="breadcrumb-list">
-								<li className="breadcrumb-list__item">
-									<i className="fas fa-home"></i>Trang chủ
-								</li>
-								<span className="break">/</span>
-								<li className="breadcrumb-list__item">
-									Trang chủ
-								</li>
-							</ul>
-						</div>
-						<div className="row mt-5">
-							<div className="card-group">
-								<TableCart disable={false} />
+const Pay = ({ listCart, fetchCart }) => {
+	useEffect(() => {
+		fetchCart();
+	}, []);
+
+	const { user } = isAuthenticated();
+	const { cart: dataCart, loading } = listCart;
+
+	if (user) {
+		if (loading) {
+			return <Loading />;
+		} else if (dataCart.length > 0) {
+			// list order theo user
+			const listOrder = dataCart.filter(
+				(cart) => cart.userId === user._id
+			);
+			return (
+				<>
+					<div className="main bgr">
+						<div className="container">
+							<div className="all-product">
+								<div className="row mt-5">
+									<TableCart disable={false} />
+								</div>
+								{listOrder.length > 0 && <FormPay />}
+								{/* {listOrder.length <= 0 && <CartNotFound />} */}
 							</div>
 						</div>
-						<FormPay />
 					</div>
-				</div>
-			</div>
-		</>
-	);
+				</>
+			);
+		} else {
+			return <CartNotFound />;
+		}
+	} else {
+		return <div>Cần đăng nhập vào </div>;
+	}
 };
 
-// FormPay.propTypes = {
+const mapStateToProps = (state) => {
+	return {
+		listCart: state.carts,
+	};
+};
 
-// }
-
-export default Pay;
+export default connect(mapStateToProps, { fetchCart })(Pay);

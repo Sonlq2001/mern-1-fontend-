@@ -1,7 +1,11 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
-const DetailConfig = ({ product }) => {
+import { addToCart } from "./../../redux/actions/cartAction";
+import { isAuthenticated } from "./../../pages/Authentication/index";
+
+const DetailConfig = ({ product, addToCart }) => {
 	// handle price sale
 	let newPrice;
 	if (product.sale === null) {
@@ -12,30 +16,22 @@ const DetailConfig = ({ product }) => {
 
 	// handle change counter
 	const [valueCounter, setValueCounter] = useState(1);
+	const handleMinus = () => setValueCounter(valueCounter - 1);
+	const handlePlus = () => setValueCounter(valueCounter + 1);
 
-	const handleMinus = () => {
-		setValueCounter(valueCounter - 1);
-	};
-
-	const handleChange = (e) => {
-		const value = e.target.value;
-		setValueCounter(value);
-	};
-
-	const handlePlus = () => {
-		setValueCounter(valueCounter + 1);
-	};
-
+	// user
+	const { user } = isAuthenticated();
 	return (
 		<>
-			<div className="col col-lg-5">
+			<div className="col col-lg-5 col-md-6 col-sm-12 col-12">
 				<div className="detail-config">
 					<h3 className="detail-config__title">{product.name}</h3>
 					<div className="box-price">
 						<span className="box-price__new">
 							{newPrice
 								.toString()
-								.replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
+								.replace(/\B(?=(\d{3})+(?!\d))/g, ".")}{" "}
+							<sup>đ</sup>
 						</span>
 						{product.sale && (
 							<span className="box-price__old">
@@ -46,7 +42,7 @@ const DetailConfig = ({ product }) => {
 						)}
 					</div>
 					<div className="guarantee">
-						Bảo hành :
+						Bảo hành:{" "}
 						<span className="guarantee__date">
 							{product.guarantee} tháng
 						</span>
@@ -61,12 +57,8 @@ const DetailConfig = ({ product }) => {
 						>
 							<i className="fas fa-minus"></i>
 						</button>
-						<input
-							type="number"
-							className="counter__number"
-							value={valueCounter}
-							onChange={handleChange}
-						/>
+						<span className="counter__number">{valueCounter}</span>
+
 						<button
 							className="btn-counter counter__plus"
 							onClick={handlePlus}
@@ -76,37 +68,43 @@ const DetailConfig = ({ product }) => {
 					</div>
 
 					<div
+						className="list-config"
 						dangerouslySetInnerHTML={{
 							__html: product.description,
 						}}
 					></div>
-					{/* <ul className="list-config">
-						<li className="list-config__item">
-							Cpu: core I5-4300U Processor ( 3M cache, upto
-							2.90Ghz)
-						</li>
-						<li className="list-config__item">
-							Ram: 4Gb dung lượng bộ nhớ bus 1600.
-						</li>
-						<li className="list-config__item">
-							SSD : 128Gb tốc độ truy xuất cực nhanh.
-						</li>
-					</ul> */}
 
-					<button className="btn-buy">
-						<span className="btn-buy__title">mua ngay</span>
-						<span className="btn-buy__des">
-							Giao tận nơi hoặc nhận tại siêu thị
-						</span>
-					</button>
+					{user && (
+						<button
+							className="btn-buy"
+							onClick={() =>
+								addToCart(
+									product._id,
+									user._id,
+									product.price,
+									valueCounter
+								)
+							}
+						>
+							<span className="btn-buy__title">mua ngay</span>
+							<span className="btn-buy__des">
+								Giao tận nơi hoặc nhận tại siêu thị
+							</span>
+						</button>
+					)}
+
+					{!user && (
+						<Link to="/sign-in" className="btn-buy">
+							<span className="btn-buy__title">mua ngay</span>
+							<span className="btn-buy__des">
+								Giao tận nơi hoặc nhận tại siêu thị
+							</span>
+						</Link>
+					)}
 				</div>
 			</div>
 		</>
 	);
 };
 
-// DetailConfig.propTypes = {
-
-// }
-
-export default DetailConfig;
+export default connect(null, { addToCart })(DetailConfig);

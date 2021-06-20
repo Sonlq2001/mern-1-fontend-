@@ -8,7 +8,7 @@ const PrivateRoute = ({ children }) => {
 	return (
 		<Route
 			render={() => {
-				return user && user.role == 1 ? (
+				return user && user.role === 1 ? (
 					children
 				) : (
 					<Redirect to={{ pathname: "/" }} />

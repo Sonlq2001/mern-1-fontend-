@@ -50,3 +50,26 @@ export const findProduct = (id) => async (dispatch) => {
 		});
 	} catch (error) {}
 };
+
+export const lowToHight = () => (dispatch) => {
+	dispatch({
+		type: typeAction.LOW_TO_HIGHT,
+	});
+};
+
+export const hightToLow = () => (dispatch) => {
+	dispatch({
+		type: typeAction.HIGHT_TO_LOW,
+	});
+};
+
+export const searchMain = () => (dispatch) => {
+	console.log("ok search");
+};
+
+export const filterCate = (id) => (dispatch) => {
+	dispatch({
+		type: typeAction.FILTER_CATE,
+		payload: id,
+	});
+};

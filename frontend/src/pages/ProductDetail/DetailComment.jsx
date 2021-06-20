@@ -1,40 +1,37 @@
 import React, { useState, useEffect } from "react";
 // import PropTypes from "prop-types";
 import { useParams } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { connect } from "react-redux";
+import moment from "moment";
 
 import { isAuthenticated } from "./../../pages/Authentication/index";
 import { fetchComment, addComment } from "./../../redux/actions/commentAction";
+import { fetchUser } from "./../../redux/actions/userActions";
 import product_1 from "./../../assets/images/product-1.jpg";
-import userApi from "./../../api/userApi";
 
-const DetailComment = (props) => {
-	const { data, loading } = useSelector((state) => state.comments);
-	const dispatch = useDispatch();
-	const [listUser, setListUser] = useState([]);
+const DetailComment = ({
+	comments,
+	fetchComment,
+	addComment,
+	listUser,
+	fetchUser,
+}) => {
 	const { user } = isAuthenticated();
 	const { id } = useParams();
 
 	useEffect(() => {
-		dispatch(fetchComment());
+		fetchComment();
+		fetchUser();
 	}, []);
 
-	useEffect(() => {
-		const callApi = async () => {
-			try {
-				const { data } = await userApi.getAll();
-				setListUser(data);
-			} catch (error) {}
-		};
-		callApi();
-	}, []);
+	const { data, loading } = comments;
+	const { data: dataUser } = listUser;
 
 	// xứ lý cmt
 	const dataCmt = [];
 	const listCmt = data.filter((cmt) => cmt.prdId === id);
 	listCmt.forEach((cmt) => {
-		const listUserCmt = listUser.filter((user) => user._id === cmt.userId);
-
+		const listUserCmt = dataUser.filter((user) => user._id === cmt.userId);
 		const mixCmt = listUserCmt.map((user) => {
 			return {
 				_id: cmt._id,
@@ -43,11 +40,13 @@ const DetailComment = (props) => {
 				time: cmt.createdAt,
 			};
 		});
-
 		dataCmt.push(...mixCmt);
 	});
 
-	// xử lý form comment
+	// xử lý effect comment
+	const [finish, setFinish] = useState(false);
+
+	// xử lý add comment
 	const [value, setValue] = useState("");
 	const handleChange = (e) => {
 		setValue(e.target.value);
@@ -61,15 +60,17 @@ const DetailComment = (props) => {
 			content: value,
 		};
 		setValue("");
-		dispatch(addComment(comment));
+		addComment(comment);
 	};
 
 	return (
 		<>
-			<div className="col col-lg-9">
+			<div className="col col-lg-9 col-md-12 col-sm-12 col-12">
 				<div className="comment-group">
 					<div className="comment-header">
-						<div className="count-comment">0 Comments</div>
+						<div className="count-comment">
+							{dataCmt.length} Comments
+						</div>
 					</div>
 
 					{user && (
@@ -92,17 +93,27 @@ const DetailComment = (props) => {
 									placeholder="Bình luận"
 									onChange={handleChange}
 									value={value}
+									onClick={() => setFinish(true)}
 								></input>
-								<div className="comment-box-control">
-									<button className="btn-cancel btn-cmt">
-										cancel
-									</button>
-									<button className="btn-submit btn-cmt">
-										comment
-									</button>
-								</div>
+								{finish && (
+									<div className="comment-box-control">
+										<button
+											className="btn-cancel btn-cmt"
+											onClick={() => setFinish(false)}
+										>
+											cancel
+										</button>
+										<button className="btn-submit btn-cmt">
+											comment
+										</button>
+									</div>
+								)}
 							</form>
 						</div>
+					)}
+
+					{!user && (
+						<div>Bạn cần đăng nhập để dử dụng chức năng nầy</div>
 					)}
 
 					<div className="list-comment">
@@ -131,7 +142,9 @@ const DetailComment = (props) => {
 												<i className="fas fa-circle"></i>
 											</span>
 											<span className="commented-time">
-												2 ngày trước
+												{moment(cmt.createdAt).format(
+													"HH:MM DD/MM/YYYY"
+												)}
 											</span>
 										</div>
 									</div>
@@ -145,8 +158,17 @@ const DetailComment = (props) => {
 	);
 };
 
-// DetailComment.propTypes = {
+const mapStateToProps = (state) => {
+	return {
+		comments: state.comments,
+		listUser: state.users,
+	};
+};
 
-// }
+const mapActionToProps = {
+	fetchComment,
+	fetchUser,
+	addComment,
+};
 
-export default DetailComment;
+export default connect(mapStateToProps, mapActionToProps)(DetailComment);

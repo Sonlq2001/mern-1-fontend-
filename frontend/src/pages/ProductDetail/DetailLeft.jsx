@@ -1,10 +1,9 @@
 import React from "react";
-import PropTypes from "prop-types";
 
 const DetailLeft = (props) => {
 	return (
 		<>
-			<div className="col col-lg-9">
+			<div className="col col-lg-9 col-md-12 col-sm-12 col-12">
 				<div className="overview-group">
 					<div className="group-config">
 						<h4 className="group-config__title">
@@ -72,9 +71,5 @@ const DetailLeft = (props) => {
 		</>
 	);
 };
-
-// DetailLeft.propTypes = {
-
-// }
 
 export default DetailLeft;

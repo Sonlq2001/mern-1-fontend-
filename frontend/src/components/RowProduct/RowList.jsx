@@ -1,36 +1,42 @@
-import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { connect } from "react-redux";
 
 import { fetchProduct } from "./../../redux/actions/productAction";
+import { addToCart } from "./../../redux/actions/cartAction";
 import Loading from "./../../components/Loading";
+import { isAuthenticated } from "./../../pages/Authentication/index";
 
-const RowList = ({ category }) => {
-	const {
-		products: { data },
-	} = useSelector((state) => state);
-	const dispatch = useDispatch();
+const RowList = ({ category, data: products, fetchProduct, addToCart }) => {
 	useEffect(() => {
-		dispatch(fetchProduct());
-	}, [dispatch]);
+		fetchProduct();
+	}, [fetchProduct]);
+	const { data, loading } = products;
 
-	const [location, setLocation] = useState({
-		top: 0,
-		left: 0,
-	});
-
-	if (data.length > 0) {
+	if (loading) {
+		return <Loading />;
+	} else if (data.length > 0) {
 		// lấy ra sản phẩm theo danh mục
-		const listProduct = data.filter((prd) => prd.cateId == category._id);
+		const listProduct = data.filter((prd) => prd.cateId === category._id);
+		// handle hover
+		// const [location, setLocation] = useState({
+		// 	top: 0,
+		// 	left: 0,
+		// });
 
-		const handleHover = (e) => {
-			const x = e.clientX - 60;
-			const y = e.clientY - 60;
-			setLocation({
-				top: `${y}px`,
-				left: `${x}px`,
-			});
+		// const handleHover = (e) => {
+		// 	const x = e.clientX - 60;
+		// 	const y = e.clientY - 60;
+		// 	setLocation({
+		// 		top: `${y}px`,
+		// 		left: `${x}px`,
+		// 	});
+		// };
+
+		// handle add to cart
+		const { user } = isAuthenticated();
+		const handleAddToCart = (product) => {
+			addToCart(product._id, user._id, product.price);
 		};
 
 		return (
@@ -39,7 +45,10 @@ const RowList = ({ category }) => {
 					{listProduct.map((product, index) => {
 						if (index <= 5) {
 							return (
-								<div className="col col-lg-2" key={product._id}>
+								<div
+									className="col col-lg-2 col-md-4 col-sm-6 col-6 mt-4"
+									key={product._id}
+								>
 									<div
 										className="box-product"
 										// onMouseMove={(e) => handleHover(e)}
@@ -59,7 +68,7 @@ const RowList = ({ category }) => {
 												/>
 											</div>
 											<span className="box-body__price">
-												Giá bán :
+												Giá bán:{" "}
 												{product.price
 													.toString()
 													.replace(
@@ -69,17 +78,34 @@ const RowList = ({ category }) => {
 												<sup>đ</sup>
 											</span>
 										</div>
-										<button className="box-card">
-											<i className="box-card__icon fas fa-cart-plus"></i>
-											<span className="box-card__card">
-												Thêm vào giỏ
-											</span>
-										</button>
 
-										<div
-											className={`box-detail`}
-											style={location}
-										>
+										{user && (
+											<button
+												className="box-card"
+												onClick={() =>
+													handleAddToCart(product)
+												}
+											>
+												<i className="box-card__icon fas fa-cart-plus"></i>
+												<span className="box-card__card">
+													Thêm vào giỏ
+												</span>
+											</button>
+										)}
+
+										{!user && (
+											<Link
+												to="/sign-in"
+												className="box-card"
+											>
+												<i className="box-card__icon fas fa-cart-plus"></i>
+												<span className="box-card__card">
+													Thêm vào giỏ
+												</span>
+											</Link>
+										)}
+
+										<div className={`box-detail`}>
 											<h3 className="box-detail__name">
 												{product.name}
 											</h3>
@@ -112,16 +138,27 @@ const RowList = ({ category }) => {
 									</div>
 								</div>
 							);
+						} else {
+							return false;
 						}
 					})}
 				</div>
 			</div>
 		);
 	} else {
-		return <Loading />;
+		return null;
 	}
 };
 
-RowList.propTypes = {};
+const mapStateToProps = (state) => {
+	return {
+		data: state.products,
+	};
+};
 
-export default RowList;
+const mapActionToProps = {
+	fetchProduct,
+	addToCart,
+};
+
+export default connect(mapStateToProps, mapActionToProps)(RowList);

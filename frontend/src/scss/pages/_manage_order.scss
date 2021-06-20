@@ -1,0 +1,108 @@
+.table-ordered {
+	font-size: 1.4rem;
+	width: 100%;
+	margin-top: -2rem;
+	tr {
+		border-bottom: 1px solid $ccc-color;
+
+		th {
+			font-weight: 500;
+		}
+
+		th,
+		td {
+			padding: 2rem 1.5rem;
+		}
+	}
+
+	.client-view-order {
+		color: $blue-main-color;
+	}
+}
+
+// view detail order
+.title-order {
+	font-weight: 400;
+	margin-bottom: 1.5rem;
+	text-transform: uppercase;
+}
+.box-info-order {
+	background-color: $white-color;
+	margin-bottom: 1.5rem;
+	padding: 1.5rem 1rem;
+	border-radius: 5px;
+	min-height: 130px;
+
+	&__user {
+		text-transform: uppercase;
+		font-size: 1.4rem;
+	}
+
+	.box-info-detail + .box-info-detail {
+		margin-top: 5px;
+	}
+	.box-info-detail {
+		font-size: 1.3rem;
+		&__label {
+			font-weight: 300;
+			display: inline-block;
+			margin-right: 5px;
+		}
+	}
+}
+
+.table-product {
+	width: 100%;
+	margin-top: -1.5rem;
+	tr {
+		border-bottom: 1px solid $eee-color;
+		margin-top: -2rem;
+
+		th {
+			font: {
+				size: 1.4rem;
+				weight: 500;
+			}
+		}
+		th,
+		td {
+			padding: 1.5rem 5px;
+		}
+
+		td {
+			font-size: 1.3rem;
+
+			.product-item {
+				display: flex;
+
+				&__img {
+					width: 60px;
+					margin-right: 1.5rem;
+				}
+
+				.product-info {
+					flex-grow: 1;
+					&__name {
+						width: 35rem;
+						word-break: break-word;
+					}
+					&__path {
+						display: inline-block;
+						margin-top: 1.5rem;
+						border: 1px solid $blue-main-color;
+						border-radius: 5px;
+						padding: 3px 1rem;
+					}
+				}
+			}
+
+			.total-pay {
+				text-align: right;
+			}
+		}
+	}
+
+	tbody tr:hover {
+		background-color: rgb(252, 252, 252);
+	}
+}

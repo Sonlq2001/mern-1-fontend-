@@ -1,9 +1,13 @@
 import typeAction from "./../typeAction/typeAction";
 import subCategoryApi from "./../../api/subCategoryApi";
 
-export const fetchSubCategory = () => async (dispatch) => {
+export const fetchSubCategory = (keySearch) => async (dispatch) => {
 	try {
 		const { data } = await subCategoryApi.getAll();
+		// const handleData = data.map((item) => ({
+		// 	select: false,
+		// 	...item,
+		// }));
 		dispatch({
 			type: typeAction.LIST_SUBCATEGORY,
 			payload: data,
@@ -39,4 +43,12 @@ export const updateSubCategory = (id, subCate) => async (dispatch) => {
 			payload: data,
 		});
 	} catch (error) {}
+};
+
+export const setCheckbox = (checked, id) => (dispatch) => {
+	dispatch({
+		type: typeAction.SET_CHECKBOX,
+		payload: id,
+		checked,
+	});
 };

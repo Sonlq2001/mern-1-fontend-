@@ -1,7 +1,5 @@
 import React from "react";
-import PropTypes from "prop-types";
 
-import product_1 from "./../../assets/images/product-1.jpg";
 import DetailConfig from "./DetailConfig";
 import DetailHotline from "./DetailHotline";
 
@@ -10,7 +8,7 @@ const DetailTop = ({ product }) => {
 		<>
 			<div className="detail-top">
 				<div className="row">
-					<div className="col col-lg-4">
+					<div className="col col-lg-4 col-md-6 col-sm-12 col-12">
 						<div className="box-img">
 							<img
 								src={`http://localhost:4000/api/product/img/${product._id}`}
@@ -27,9 +25,5 @@ const DetailTop = ({ product }) => {
 		</>
 	);
 };
-
-// DetailTop.propTypes = {
-
-// }
 
 export default DetailTop;

@@ -14,9 +14,14 @@ import SearchProduct from "./pages/Product/SearchProduct";
 
 import SignIn from "./pages/Authentication/SignIn";
 import SignUp from "./pages/Authentication/SignUp";
+import PrivateAuth from "./pages/Authentication/PrivateAuth";
 
 import Card from "./pages/Card/Card";
 import Pay from "./pages/Card/Pay";
+
+import Account from "./pages/Account/Account";
+import ManageOrder from "./pages/ManageOrder/ManageOrder";
+import ViewOrder from "./pages/ManageOrder/ViewOrder";
 
 function App() {
 	return (
@@ -24,7 +29,9 @@ function App() {
 			<div className="">
 				<Router>
 					<Switch>
-						<Route exact path="/sign-in" component={SignIn} />
+						<PrivateAuth path="/sign-in">
+							<SignIn />
+						</PrivateAuth>
 						<Route exact path="/sign-up" component={SignUp} />
 						<PrivateRouter path="/admin">
 							<Main />
@@ -60,6 +67,18 @@ function App() {
 								/>
 								<Route exact path="/card" component={Card} />
 								<Route exact path="/pay" component={Pay} />
+								<Route
+									path="/customer/account"
+									component={Account}
+								/>
+								<Route
+									path="/order/history"
+									component={ManageOrder}
+								/>
+								<Route
+									path="/order/view/:id"
+									component={ViewOrder}
+								/>
 							</Switch>
 							<Footer />
 						</Route>

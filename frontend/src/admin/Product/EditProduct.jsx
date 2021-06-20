@@ -1,21 +1,18 @@
 import React, { useEffect } from "react";
-// import PropTypes from "prop-types";
 import { Formik, Form, FastField, Field } from "formik";
 import * as Yup from "yup";
 import { useHistory, useParams } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { connect } from "react-redux";
 
 import {
 	fetchProduct,
 	updateProduct,
 } from "./../../redux/actions/productAction";
-import { fetchCategory } from "./../../redux/actions/categoryAction";
 
 import InPutField from "./../../customField/InputField";
 import SelectField from "./../../customField/SelectField";
 import FileField from "./../../customField/FileField";
 import TextareaField from "./../../customField/TextareaField";
-// import RadioField from "./../../customField/RadioField";
 import CheckboxField from "./../../customField/CheckboxField";
 import Loading from "./../../components/Loading";
 import {
@@ -24,23 +21,19 @@ import {
 	LIST_SUBCATEGORY,
 } from "../../constants/constants";
 
-const EditProduct = (props) => {
+const EditProduct = ({listProduct, fetchProduct, updateProduct}) => {
 	const history = useHistory();
 	const { id } = useParams();
 
-	const {
-		products: { data, loading },
-	} = useSelector((state) => state);
-	const dispatch = useDispatch();
-
 	useEffect(() => {
-		dispatch(fetchProduct());
-	}, [dispatch]);
+		fetchProduct();
+	}, []);
 
+	const {data: dataProduct, loading} = listProduct;
 	if (loading) {
-		return <Loading />;
-	} else if (data.length > 0) {
-		const editProduct = data.find((product) => product._id === id);
+		return <Loading loading_admin="loading-admin"/>;
+	} else if (dataProduct.length > 0) {
+		const editProduct = dataProduct.find((product) => product._id === id);
 		if (editProduct.sale == null) {
 			editProduct.sale = "";
 		}
@@ -71,7 +64,7 @@ const EditProduct = (props) => {
 							formProduct.append("photo", values.photo);
 						}
 
-						dispatch(updateProduct(id, formProduct));
+						updateProduct(id, formProduct);
 						history.push("/admin/product");
 					}}
 					validationSchema={Yup.object().shape({
@@ -107,7 +100,7 @@ const EditProduct = (props) => {
 										</div>
 									</div>
 								</div>
-								<Form className="row bg-white">
+								<Form className="row bg-white fs-5">
 									<div className="col-md-6">
 										<div className="card-body">
 											<SelectField
@@ -127,7 +120,7 @@ const EditProduct = (props) => {
 												type="text"
 												name="name"
 												placeholder="Tên"
-												className="form-control"
+												className="form-control fs-5"
 											/>
 
 											<InPutField
@@ -135,7 +128,7 @@ const EditProduct = (props) => {
 												type="number"
 												name="price"
 												placeholder="Giá"
-												className="form-control"
+												className="form-control fs-5"
 											/>
 
 											<InPutField
@@ -143,7 +136,7 @@ const EditProduct = (props) => {
 												type="number"
 												name="sale"
 												placeholder="Giá sale"
-												className="form-control"
+												className="form-control fs-5"
 											/>
 
 											<FastField
@@ -151,6 +144,7 @@ const EditProduct = (props) => {
 												type="file"
 												name="photo"
 												label="Ảnh"
+												className="form-control fs-5"
 											/>
 
 											<img
@@ -199,7 +193,7 @@ const EditProduct = (props) => {
 
 									<div className="col col-lg-12">
 										<div className="card-body text-end">
-											<button className="btn btn-info">
+											<button className="btn btn-info fs-5">
 												Sửa sản phẩm
 											</button>
 										</div>
@@ -212,11 +206,16 @@ const EditProduct = (props) => {
 			</>
 		);
 	}
-	// lấy ra danh mục
+
 };
 
-// AddProduct.propTypes = {
+const mapStateToProps = (state) => {
+	return {
+		listProduct: state.products
+	}
+}
 
-// }
 
-export default EditProduct;
+
+export default connect(mapStateToProps, {fetchProduct,
+		updateProduct})(EditProduct);

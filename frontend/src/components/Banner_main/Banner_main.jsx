@@ -10,15 +10,14 @@ const Banner_main = (props) => {
 				<div className="row g-3">
 					<div className="col col-lg-6">
 						<div className="banner-main">
-							<a href="">
+							<a href="/#">
 								<img src={banner_main1} alt="" />
 							</a>
 						</div>
 					</div>
-
 					<div className="col col-lg-6">
 						<div className="banner-main">
-							<a href="">
+							<a href="/#">
 								<img src={banner_main1} alt="" />
 							</a>
 						</div>
@@ -29,6 +28,6 @@ const Banner_main = (props) => {
 	);
 };
 
-Banner_main.propTypes = {};
+// Banner_main.propTypes = {};
 
 export default Banner_main;

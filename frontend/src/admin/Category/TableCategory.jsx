@@ -2,8 +2,6 @@ import React from "react";
 // import PropTypes from 'prop-types'
 import { Link } from "react-router-dom";
 
-import EmptyTable from "./../EmptyTable";
-import Loading from "./../../components/Loading";
 const TabletCategory = ({ data, handleRemove }) => {
 	return (
 		<>
@@ -12,7 +10,7 @@ const TabletCategory = ({ data, handleRemove }) => {
 					<tr>
 						<th scope="col">#</th>
 						<th scope="col">Ảnh</th>
-						<th scope="col">Tên</th>
+						<th scope="col">Tên danh mục</th>
 						<th scope="col">Hành động</th>
 					</tr>
 				</thead>
@@ -27,18 +25,19 @@ const TabletCategory = ({ data, handleRemove }) => {
 									className="img-cate"
 									width="64px"
 									height="64px"
+									style={{ backgroundColor: "#aaa" }}
 								/>
 							</td>
 							<td>{cate.name}</td>
 							<td>
 								<Link
 									to={`/admin/edit-category/${cate._id}`}
-									className="btn btn-primary me-3"
+									className="btn btn-primary me-3 fs-5"
 								>
 									Sửa
 								</Link>
 								<button
-									className="btn btn-danger"
+									className="btn btn-danger fs-5"
 									onClick={() => handleRemove(cate._id)}
 								>
 									Xóa

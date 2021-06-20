@@ -1,7 +1,13 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React, { useEffect } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
+import { connect } from "react-redux";
+
+import { fetchCart, removeCart } from "./../../redux/actions/cartAction";
+import orderApi from "./../../api/orderApi";
+import orderDetailApi from "./../../api/orderDetailApi";
+import cartApi from "./../../api/cartApi";
+import { isAuthenticated } from "./../Authentication/index";
 
 import InputField from "./../../customField/InputField";
 import SelectField from "./../../customField/SelectField";
@@ -10,6 +16,9 @@ import RadioField from "./../../customField/RadioField";
 import paymentLive from "./../../assets/images/payment-live.svg";
 import paymentVisa from "./../../assets/images/payment-visa.svg";
 import paymentAtm from "./../../assets/images/payment-atm.svg";
+
+import Loading from "./../../components/Loading";
+import CartNotFound from "./CartNotFound";
 
 const capitals = [
 	{
@@ -22,7 +31,13 @@ const capitals = [
 	},
 ];
 
-const FormPay = (props) => {
+const FormPay = ({ listCart, fetchCart, removeCart }) => {
+	useEffect(() => {
+		fetchCart();
+	}, []);
+	const { user } = isAuthenticated();
+	const { cart } = listCart;
+
 	return (
 		<>
 			<Formik
@@ -33,8 +48,46 @@ const FormPay = (props) => {
 					address: "",
 					payment: "0",
 				}}
-				onSubmit={(values) => {
-					console.log(values);
+				onSubmit={async (values) => {
+					values.userId = user._id;
+					try {
+						// lưu vào trong order
+						const { data } = await orderApi.add(values);
+						if (data) {
+							if (cart.length > 0) {
+								// lấy các sản phẩm của user đã order
+								const cartUser = cart.filter((itemCart) => {
+									return itemCart.userId === user._id;
+								});
+
+								// lưu dữ liệu vào trong order detail
+								const orderDetail = cartUser.map((cart) => {
+									return {
+										orderId: data._id,
+										userId: cart.userId,
+										prdId: cart.prdId,
+										quantity: cart.quantity,
+										unitPrice: cart.price,
+										status: 1,
+									};
+								});
+								const result = await orderDetailApi.add(
+									orderDetail
+								);
+								if (result) {
+									// xóa bỏ sp trong giỏ
+									cartUser.forEach((itemCart) => {
+										cartApi.remove(itemCart._id);
+										removeCart(itemCart._id);
+									});
+
+									alert(
+										"Đặt hàng thành công !, Cảm ơn quý khách đã đặt hàng !"
+									);
+								}
+							}
+						}
+					} catch (error) {}
 				}}
 				validationSchema={Yup.object().shape({
 					name: Yup.string().required(
@@ -87,12 +140,6 @@ const FormPay = (props) => {
 
 								<div className="col col-lg-6">
 									<div className="form-pay">
-										{/* <label
-											htmlFor=""
-											className="form-field__label"
-										>
-											Chọn phương thức thanh toán
-										</label> */}
 										<InputField
 											label="Địa chỉ"
 											classLabel="form-field__label"
@@ -178,8 +225,15 @@ const FormPay = (props) => {
 	);
 };
 
-// FormPay.propTypes = {
+const mapStateToProps = (state) => {
+	return {
+		listCart: state.carts,
+	};
+};
 
-// }
+const mapActionToProps = {
+	fetchCart,
+	removeCart,
+};
 
-export default FormPay;
+export default connect(mapStateToProps, mapActionToProps)(FormPay);

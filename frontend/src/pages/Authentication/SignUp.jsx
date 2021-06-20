@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
-import { Formik, Form } from "formik";
+import { Formik, Form, resetForm } from "formik";
 import * as Yup from "yup";
 import { Link } from "react-router-dom";
 
@@ -28,11 +27,13 @@ const SignUp = (props) => {
 							.min(6)
 							.required("Vui lòng nhập mật khẩu !"),
 					})}
-					onSubmit={async (values, e) => {
+					onSubmit={async (values, { resetForm }) => {
 						try {
 							const { data } = await userApi.signUp(values);
-							setSuccess(true);
-							e.target.reset();
+							if (data) {
+								setSuccess(true);
+								resetForm({ values: "" });
+							}
 						} catch (error) {
 							setError(error.response.data.error);
 						}
@@ -52,7 +53,7 @@ const SignUp = (props) => {
 										</Link>
 									</div>
 								)}
-								{error && success == false && (
+								{error && success === false && (
 									<div className="fs-4 alert alert-danger">
 										{error}
 									</div>
@@ -92,7 +93,7 @@ const SignUp = (props) => {
 								</div>
 
 								<div className="form-forgot-pwd">
-									<a href="" className="forgot-pwd">
+									<a href="/#" className="forgot-pwd">
 										Quên mật khẩu
 									</a>
 								</div>
@@ -104,9 +105,5 @@ const SignUp = (props) => {
 		</>
 	);
 };
-
-// SignUp.propTypes = {
-
-// }
 
 export default SignUp;

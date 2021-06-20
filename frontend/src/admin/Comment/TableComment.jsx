@@ -1,7 +1,8 @@
 import React from "react";
-// import PropTypes from 'prop-types'
+import moment from "moment";
+import { Link } from "react-router-dom";
 
-const TableComment = (props) => {
+const TableComment = ({ data }) => {
 	return (
 		<>
 			<table className="table table-bordered mt-4">
@@ -14,7 +15,34 @@ const TableComment = (props) => {
 						<th scope="col">Hành động</th>
 					</tr>
 				</thead>
-				<tbody></tbody>
+				<tbody>
+					{data.map((cmt) => {
+						if (cmt !== undefined) {
+							return (
+								<tr key={cmt._id}>
+									<td></td>
+									<td>{cmt.name}</td>
+									<td>{cmt.quantity}</td>
+									<td>
+										{moment(cmt.time).format(
+											"HH:MM DD/MM/YYYY"
+										)}
+									</td>
+									<td>
+										<Link
+											to={`/admin/comment/${cmt._id}`}
+											className="btn btn-primary fs-5"
+										>
+											Chi tiết
+										</Link>
+									</td>
+								</tr>
+							);
+						} else {
+							return false;
+						}
+					})}
+				</tbody>
 			</table>
 		</>
 	);

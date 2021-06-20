@@ -20,3 +20,13 @@ export const fetchComment = () => async (dispatch) => {
 		});
 	} catch (error) {}
 };
+
+export const removeComment = (id) => (dispatch) => {
+	try {
+		const { data } = commentApi.remove(id);
+		dispatch({
+			type: typeAction.REMOVE_COMMENT,
+			payload: data,
+		});
+	} catch (error) {}
+};

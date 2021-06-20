@@ -1,19 +1,16 @@
-import React, { useEffect } from "react";
+import React from "react";
 // import PropTypes from "prop-types";
 import { Formik, Form, FastField, Field } from "formik";
 import * as Yup from "yup";
 import { useHistory } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import { addProduct } from "./../../redux/actions/productAction";
-import { fetchCategory } from "./../../redux/actions/categoryAction";
-import { fetchSubCategory } from "./../../redux/actions/subCategoryAction";
 
 import InPutField from "./../../customField/InputField";
 import SelectField from "./../../customField/SelectField";
 import FileField from "./../../customField/FileField";
 import TextareaField from "./../../customField/TextareaField";
-// import RadioField from "./../../customField/RadioField";
 import CheckboxField from "./../../customField/CheckboxField";
 
 import {
@@ -38,7 +35,6 @@ const AddProduct = (props) => {
 					sale: "",
 					photo: "",
 					guarantee: "",
-					// type: "0",
 					description: "",
 					status: "",
 				}}
@@ -51,7 +47,6 @@ const AddProduct = (props) => {
 					formProduct.append("sale", values.sale);
 					formProduct.append("guarantee", values.guarantee);
 					formProduct.append("photo", values.photo);
-					// formProduct.append("type", values.type);
 					formProduct.append("description", values.description);
 					formProduct.append("status", values.status);
 
@@ -90,7 +85,7 @@ const AddProduct = (props) => {
 									</div>
 								</div>
 							</div>
-							<Form className="row bg-white">
+							<Form className="row bg-white fs-5">
 								<div className="col-md-6">
 									<div className="card-body">
 										<SelectField
@@ -110,7 +105,7 @@ const AddProduct = (props) => {
 											type="text"
 											name="name"
 											placeholder="Tên"
-											className="form-control"
+											className="form-control fs-5"
 										/>
 
 										<InPutField
@@ -118,7 +113,7 @@ const AddProduct = (props) => {
 											type="number"
 											name="price"
 											placeholder="Giá"
-											className="form-control"
+											className="form-control fs-5"
 										/>
 
 										<InPutField
@@ -126,7 +121,7 @@ const AddProduct = (props) => {
 											type="number"
 											name="sale"
 											placeholder="Giá sale"
-											className="form-control"
+											className="form-control fs-5"
 										/>
 									</div>
 								</div>
@@ -138,6 +133,7 @@ const AddProduct = (props) => {
 											type="file"
 											name="photo"
 											label="Ảnh"
+											className="form-control fs-5"
 										/>
 
 										<SelectField

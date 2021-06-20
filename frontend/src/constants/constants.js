@@ -19,7 +19,7 @@ export const LIST_CATEGORY = () => {
 	const dispatch = useDispatch();
 	useEffect(() => {
 		dispatch(fetchCategory());
-	}, []);
+	}, [dispatch]);
 	const handleCategory = data.map((cate) => ({
 		value: cate._id,
 		label: cate.name,
@@ -35,7 +35,7 @@ export const LIST_SUBCATEGORY = () => {
 
 	useEffect(() => {
 		dispatch(fetchSubCategory());
-	}, []);
+	}, [dispatch]);
 	const handleSubCategory = data.map((subCate) => ({
 		value: subCate._id,
 		label: subCate.name,

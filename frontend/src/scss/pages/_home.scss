@@ -1,5 +1,20 @@
+@import "./../abstracts/variables";
+@import "./../abstracts/mixins";
+
 .banner-main {
 	margin-top: 0.7rem;
+
+	@include tablet {
+		margin-top: 0rem;
+	}
+
+	@include mobile {
+		margin-top: 5px;
+	}
+
+	@include mobile-less {
+		display: none;
+	}
 }
 
 .main {

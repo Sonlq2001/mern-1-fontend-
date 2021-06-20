@@ -17,7 +17,7 @@ const categoryReducer = (state = initialState, action) => {
 		case typeAction.REMOVE_CATEGORY:
 			return {
 				...state,
-				data: state.data.filter((cate) => cate._id != payload._id),
+				data: state.data.filter((cate) => cate._id !== payload._id),
 			};
 
 		case typeAction.ADD_CATEGORY:
@@ -30,7 +30,7 @@ const categoryReducer = (state = initialState, action) => {
 			return {
 				...state,
 				data: state.data.map((cate) =>
-					cate._id == payload._id ? payload : cate
+					cate._id === payload._id ? payload : cate
 				),
 			};
 		default:

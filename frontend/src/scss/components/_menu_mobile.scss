@@ -1,0 +1,154 @@
+@import "./../abstracts//variables";
+@import "./../abstracts//mixins";
+
+.quantity-cart {
+	margin-right: 2.5rem;
+	position: relative;
+
+	&__num {
+		--value: 1.5rem;
+		position: absolute;
+		top: -0.8rem;
+		right: -5px;
+		font-size: 1.4rem;
+		display: inline-block;
+		width: var(--value);
+		height: var(--value);
+		background-color: $red-color;
+		border-radius: 100%;
+		color: $white-color;
+		text-align: center;
+		line-height: var(--value);
+	}
+
+	&__icon {
+		font-size: 2rem;
+	}
+}
+
+.group-mobile {
+	position: relative;
+	&__hbs {
+		font-size: 2.5rem;
+		cursor: pointer;
+	}
+
+	.active-mobile:checked ~ .nav-mobile {
+		transform: translateX(0);
+	}
+
+	.active-mobile:checked + .overlay {
+		display: block;
+	}
+
+	.overlay {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-color: rgba(0, 0, 0, 0.3);
+		z-index: 100;
+		display: none;
+		margin: 0;
+	}
+
+	.nav-mobile {
+		position: fixed;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		width: 32rem;
+		z-index: 1000;
+		background-color: $white-color;
+		border-left: 1px solid #aaa;
+		transition: 0.3s;
+		transform: translateX(110%);
+
+		@include mobile-less {
+			width: 100%;
+		}
+
+		.header-nav {
+			padding: 1rem 1.5rem;
+			margin: 0;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			border-bottom: 1px solid $ddd-color;
+
+			&__logo {
+				width: 150px;
+			}
+
+			&__close {
+				width: 1.7rem;
+				height: 1.7rem;
+				cursor: pointer;
+			}
+		}
+
+		.list-menu-mobile {
+			// margin-top: 1rem;
+			.list-menu__item + .list-menu__item {
+				border-top: 1px solid $ddd-color;
+			}
+			.box-item {
+				display: flex;
+				align-items: center;
+
+				&__link {
+					padding: 1.5rem;
+					width: 85%;
+					display: block;
+					font-size: 1.4rem;
+					transition: linear 0.3s;
+					border-right: 1px solid $ddd-color;
+
+					&:hover {
+						background-color: $eee-color;
+					}
+				}
+
+				div {
+					width: 15%;
+					height: 100%;
+					display: block;
+					padding: 1.5rem 0;
+					text-align: center;
+					cursor: pointer;
+
+					.icon-sub {
+						font-size: 1.3rem;
+						color: $aaa-color;
+					}
+
+					&:hover {
+						background-color: $eee-color;
+					}
+				}
+			}
+
+			// sub mobile
+			.sub-mobile {
+				display: none;
+				font-size: 1.4rem;
+				background: rgb(250, 250, 250);
+
+				.sub-mobile__item + .sub-mobile__item {
+					border-top: 1px solid $ddd-color;
+				}
+				&__item {
+					a {
+						display: block;
+						padding: 1.3rem 3rem;
+					}
+				}
+			}
+
+			.sub-mobile.active {
+				display: block;
+			}
+		}
+	}
+}

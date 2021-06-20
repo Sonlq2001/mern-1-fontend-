@@ -29,7 +29,15 @@
 	// tbody tr:nth-of-type(even) {
 	// 	// background-color: #f1f1f1;
 	// }
-
+	.img-cart {
+		width: 100px;
+		height: 100px;
+	}
+	.remove-cart {
+		background-color: transparent;
+		text-decoration: underline;
+		color: $blue-main-color;
+	}
 	tbody tr:last-of-type {
 		border-bottom: 2px solid $blue-main-color;
 	}
@@ -42,12 +50,13 @@
 		}
 
 		.count-total__num {
+			display: inline-block;
 			text-align: center;
 			width: 3rem;
 			height: 2.5rem;
 			border: 1px solid #f3f3f3;
 			position: relative;
-			top: 2px;
+			top: 3px;
 			font-size: 1.6rem;
 		}
 	}
@@ -101,6 +110,7 @@
 			padding: 1rem 1.5rem;
 			border-radius: 5px;
 			transition: linear 0.3s;
+			font-size: 1.4rem;
 
 			&:hover {
 				border: 1px solid $blue-main-color;
@@ -180,5 +190,36 @@
 		&:hover {
 			background-color: $eee-color;
 		}
+	}
+}
+
+// empty cart
+.empty-cart {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+
+	&__title {
+		font-size: 1.8rem;
+	}
+	&__go-shopping {
+		display: inline-block;
+		width: 150px;
+		height: 40px;
+		text-align: center;
+		line-height: 40px;
+		color: $white-color;
+		font-size: 1.4rem;
+		border-radius: 2px;
+		background-color: $blue-main-color;
+		transition: 0.3s;
+
+		&:hover {
+			background-color: $blue-2;
+			color: $white-color;
+		}
+	}
+	&__img {
+		width: 300px;
 	}
 }

@@ -1,12 +1,11 @@
 import React from "react";
-import PropTypes from "prop-types";
 
 import hotline from "./../../assets/images/hotline.jpg";
 
 const DetailHotline = (props) => {
 	return (
 		<>
-			<div className="col col-lg-3">
+			<div className="col col-lg-3 col-md-12 col-sm-12 col-12">
 				<div className="box-hotline">
 					<img src={hotline} alt="" />
 
@@ -34,9 +33,5 @@ const DetailHotline = (props) => {
 		</>
 	);
 };
-
-// DetailHotline.propTypes = {
-
-// }
 
 export default DetailHotline;

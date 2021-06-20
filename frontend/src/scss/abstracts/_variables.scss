@@ -8,7 +8,9 @@ $footer-color: #282828;
 $aaa-color: #aaa;
 $eee-color: #eee;
 $ddd-color: #ddd;
+$ccc-color: #ccc;
 $bbb-color: #bbb;
+$bgr-customer: #f4f4f4;
 $red-deep-color: #d0021b;
 
 // error form
@@ -19,4 +21,8 @@ $red-deep-color: #d0021b;
 	color: #da542e;
 	font-size: 1.3rem;
 	margin-top: 5px;
+}
+
+.invalid-feedback {
+	font-size: 1.3rem;
 }

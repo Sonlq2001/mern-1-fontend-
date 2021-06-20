@@ -1,7 +1,6 @@
 import userApi from "./../../api/userApi";
 
 export const authenticate = (data, next) => {
-	console.log(data);
 	if (typeof window !== undefined) {
 		localStorage.setItem("user", JSON.stringify(data));
 		next();

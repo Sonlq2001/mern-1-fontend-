@@ -18,7 +18,7 @@ const slideReducer = (state = initialState, action) => {
 		case typeAction.REMOVE_SLIDE:
 			return {
 				...state,
-				data: state.data.filter((slide) => slide._id != payload._id),
+				data: state.data.filter((slide) => slide._id !== payload._id),
 			};
 
 		case typeAction.ADD_SLIDE:

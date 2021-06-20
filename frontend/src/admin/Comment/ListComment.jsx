@@ -1,68 +1,81 @@
-import React, { useEffect, useState } from "react";
-// import PropTypes from 'prop-types'
-import { useSelector, useDispatch } from "react-redux";
+import React, { useEffect } from "react";
+import { connect } from "react-redux";
 
 import { fetchComment } from "./../../redux/actions/commentAction";
 import { fetchProduct } from "./../../redux/actions/productAction";
 
-import userApi from "./../../api/userApi";
 import HeaderTable from "./../common/HeaderTable";
 import TableComment from "./TableComment";
+import Loading from "./../../components/Loading";
+import NotFoundAdmin from "./../common/NotFoundAdmin";
 
-const ListComment = (props) => {
-	const [listUser, setListUser] = useState([]);
-	const {
-		comments: { data },
-		products: { data: listProduct },
-	} = useSelector((state) => state);
-	const dispatch = useDispatch();
-
+const ListComment = ({
+	listProduct,
+	listComment,
+	fetchProduct,
+	fetchComment,
+}) => {
 	useEffect(() => {
-		dispatch(fetchComment());
-		dispatch(fetchProduct());
-
-		const callApi = async () => {
-			try {
-				const { data } = await userApi.getAll();
-				setListUser(data);
-			} catch (error) {}
-		};
-		callApi();
+		fetchProduct();
+		fetchComment();
 	}, []);
 
-	const listCmt = [];
-	listProduct.forEach((prd) => {
-		const commented = data.filter((cmt) => cmt.prdId == prd._id);
+	const { data: dataComment, loading } = listComment;
+	const { data: dataProduct } = listProduct;
 
-		const handleCmt = commented.map((cmt) => {
-			return {
-				_id: prd._id,
-				name: prd.name,
-				quantity: commented.length,
-			};
+	if (loading) {
+		return <Loading loading_admin="loading-admin" />;
+	} else if (dataComment.length > 0 && dataProduct.length > 0) {
+		const listCmt = [];
+		dataProduct.forEach((prd) => {
+			const commented = dataComment.filter(
+				(cmt) => cmt.prdId === prd._id
+			);
+
+			const handleCmt = commented.map((cmt, index) => {
+				if (index < 1) {
+					return {
+						_id: prd._id,
+						name: prd.name,
+						quantity: commented.length,
+						time: cmt.createdAt,
+					};
+				} else {
+					return false;
+				}
+			});
+			listCmt.push(...handleCmt);
 		});
-		listCmt.push(...handleCmt);
-	});
-	const a = Array.from(new Set(listCmt));
-	console.log(a);
 
-	return (
-		<>
-			<HeaderTable title="Danh sách comment" path="" />
-			<div className="row bg-white">
-				<div className="col col-lg-12">
-					{/* <div className="card-body">
-						<h5 className="card-title mb-0">Static Table</h5>
-					</div> */}
-					<TableComment />
-				</div>
-			</div>
-		</>
-	);
+		if (listCmt.length > 0) {
+			return (
+				<>
+					<HeaderTable title="Danh sách comment" path="" />
+					<div className="row bg-white fs-5">
+						<div className="col col-lg-12">
+							<TableComment data={listCmt} />
+						</div>
+					</div>
+				</>
+			);
+		} else {
+			return null;
+		}
+	} else {
+		return <NotFoundAdmin title="Hiện tại chưa có dữ liệu comment nào !" />;
+	}
 };
 
-// ListComment.propTypes = {
+const mapStateToProps = (state) => {
+	return {
+		listComment: state.comments,
+		listProduct: state.products,
+	};
+};
 
-// }
+const mapActionToProps = {
+	fetchComment,
+	fetchProduct,
+};
 
-export default ListComment;
+export default connect(mapStateToProps, mapActionToProps)(ListComment);

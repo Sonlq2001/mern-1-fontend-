@@ -1,10 +1,25 @@
-import React from "react";
-// import PropTypes from "prop-types";
+import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
-import Loading from "./../../components/Loading";
-import EmptyTable from "./../EmptyTable";
-const TableProduct = ({ products, categories, handleRemove }) => {
+import {
+	fetchProduct,
+	removeProduct,
+} from "./../../redux/actions/productAction";
+import { fetchCategory } from "./../../redux/actions/categoryAction";
+
+const TableProduct = ({
+	dataProduct,
+	fetchCategory,
+	listCategory,
+	handleRemove,
+}) => {
+	useEffect(() => {
+		fetchCategory();
+	}, []);
+
+	const { data: dataCategory } = listCategory;
+
 	return (
 		<>
 			<table className="table table-bordered mt-5">
@@ -20,9 +35,9 @@ const TableProduct = ({ products, categories, handleRemove }) => {
 					</tr>
 				</thead>
 				<tbody>
-					{products.map((product, index) => {
+					{dataProduct.map((product, index) => {
 						let nameCate = "";
-						for (let cate of categories) {
+						for (let cate of dataCategory) {
 							if (cate._id === product.cateId) {
 								nameCate = cate.name;
 							}
@@ -61,7 +76,7 @@ const TableProduct = ({ products, categories, handleRemove }) => {
 								<td>
 									<Link
 										to={`/admin/edit-product/${product._id}`}
-										className="btn btn-primary me-3"
+										className="btn btn-primary me-3 fs-5"
 									>
 										Sửa
 									</Link>
@@ -69,7 +84,7 @@ const TableProduct = ({ products, categories, handleRemove }) => {
 										onClick={() =>
 											handleRemove(product._id)
 										}
-										className="btn btn-danger"
+										className="btn btn-danger fs-5"
 									>
 										Xóa
 									</button>
@@ -83,8 +98,17 @@ const TableProduct = ({ products, categories, handleRemove }) => {
 	);
 };
 
-// TableProduct.propTypes = {
+const mapStateToProps = (state) => {
+	return {
+		listProduct: state.products,
+		listCategory: state.categories,
+	};
+};
 
-// }
+const mapActionToProps = {
+	fetchProduct,
+	fetchCategory,
+	removeProduct,
+};
 
-export default TableProduct;
+export default connect(mapStateToProps, mapActionToProps)(TableProduct);

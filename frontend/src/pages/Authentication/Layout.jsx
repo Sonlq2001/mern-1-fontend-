@@ -1,12 +1,8 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { Formik, Form } from "formik";
-import * as Yup from "yup";
 
 import icon_google from "./../../assets/images/google.svg";
 import icon_facebook from "./../../assets/images/facebook.svg";
-import InPutField from "./../../customField/InputField";
 
 const Layout = ({ children, title }) => {
 	return (

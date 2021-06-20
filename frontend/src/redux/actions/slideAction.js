@@ -1,4 +1,3 @@
-import { useHistory } from "react-router-dom";
 import typeAction from "./../typeAction/typeAction";
 import slideApi from "./../../api/slideApi";
 

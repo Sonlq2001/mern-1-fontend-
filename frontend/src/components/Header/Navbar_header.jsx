@@ -1,15 +1,21 @@
-import React, { useState } from "react";
-// import PropTypes from "prop-types";
-import { Link, useHistory } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useHistory, useLocation } from "react-router-dom";
+import { connect } from "react-redux";
 
-function Navbar_header(props) {
+import { fetchCart } from "./../../redux/actions/cartAction";
+import { isAuthenticated } from "./../../pages/Authentication/index";
+
+function Navbar_header({ listCart, fetchCart }) {
 	const history = useHistory();
-	const [keySearch, setKeySearch] = useState("");
+	const { pathname } = useLocation();
+	const [navbar, setNavbar] = useState(false);
+	const [showNav, setShowNav] = useState(false);
 
+	// handle search
+	const [keySearch, setKeySearch] = useState("");
 	const handleOnChang = (e) => {
 		setKeySearch(e.target.value.toLowerCase().trim());
 	};
-
 	const handleOnSubmit = (e) => {
 		e.preventDefault();
 		if (keySearch === "") {
@@ -19,16 +25,79 @@ function Navbar_header(props) {
 		}
 	};
 
+	// handle sticky header
+	useEffect(() => {
+		window.addEventListener("scroll", () => {
+			if (window.innerWidth >= 992) {
+				if (window.scrollY >= 70) {
+					setNavbar(true);
+				} else {
+					setNavbar(false);
+				}
+			} else {
+				setNavbar(false);
+			}
+
+			if (window.scrollY >= 430 && pathname === "/") {
+				setShowNav(true);
+			} else if (window.scrollY >= 0 && pathname !== "/") {
+				setShowNav(true);
+			} else {
+				setShowNav(false);
+			}
+		});
+	}, [navbar, pathname, showNav]);
+
+	// show total cart
+	const { user } = isAuthenticated();
+	useEffect(() => {
+		fetchCart();
+	}, []);
+	const { cart } = listCart;
+	let totalCart = 0;
+	if (user) {
+		if (cart.length > 0) {
+			for (let cartProduct of cart) {
+				if (cartProduct.userId === user._id) {
+					totalCart += cartProduct.quantity;
+				}
+			}
+		}
+	}
+
 	return (
 		<>
-			<div className="nav-group">
+			<div className={`nav-group ${navbar ? "sticky" : null} `}>
 				<div className="container">
 					<nav className="nav-header">
-						<div className="nav-cate">
+						<div className={`nav-cate ${showNav ? "active" : ""}`}>
 							<i className="nav-cate__icon fas fa-bars"></i>
 							<span className="nav-cate__txt">
 								DANH MỤC SẢN PHẨM
 							</span>
+
+							<ul className="list-menu list-move">
+								<li className="item-menu">
+									<a href="" className="path-menu">
+										<img
+											src="http://localhost:4000/api/category/img/60b7328a2339642f646afe2a"
+											alt=""
+											className="img-menu"
+										/>
+										danh mục
+									</a>
+									<ul className="sub-menu">
+										<li className="sub-menu__item">
+											<a
+												href=""
+												className="link-sub-menu"
+											>
+												asdf
+											</a>
+										</li>
+									</ul>
+								</li>
+							</ul>
 						</div>
 
 						<div className="nav-hot">
@@ -37,7 +106,7 @@ function Navbar_header(props) {
 							</marquee>
 						</div>
 
-						<div className="nav-group">
+						<div className="nav-group-search">
 							<form
 								className="nav-search"
 								onSubmit={handleOnSubmit}
@@ -55,7 +124,15 @@ function Navbar_header(props) {
 							</form>
 							<Link to="/card" className="nav-card">
 								<i className="fas fa-shopping-cart"></i>
-								<span className="nav-card__total">(0)</span>
+								{user && (
+									<span className="nav-card__total">
+										({totalCart})
+									</span>
+								)}
+
+								{!user && (
+									<span className="nav-card__total">(0)</span>
+								)}
 							</Link>
 							{/* <div className="nav-login">
 							<a href="">Đăng nhập</a>
@@ -68,6 +145,13 @@ function Navbar_header(props) {
 	);
 }
 
-Navbar_header.propTypes = {};
+const mapStateToProps = (state) => {
+	return {
+		listCart: state.carts,
+	};
+};
 
-export default Navbar_header;
+const mapActionToProps = {
+	fetchCart,
+};
+export default connect(mapStateToProps, mapActionToProps)(Navbar_header);

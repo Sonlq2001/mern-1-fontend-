@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 
 const Loading = ({ loading_admin }) => {
 	return (
@@ -8,9 +7,5 @@ const Loading = ({ loading_admin }) => {
 		</div>
 	);
 };
-
-// loading.propTypes = {
-
-// }
 
 export default Loading;

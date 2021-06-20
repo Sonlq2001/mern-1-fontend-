@@ -1,29 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
-// import PropTypes from "prop-types";
-import { useSelector, useDispatch } from "react-redux";
+import { connect } from "react-redux";
 
-import { fetchProduct, findProduct } from "./../../redux/actions/productAction";
-import productApi from "./../../api/productApi";
+import { fetchProduct } from "./../../redux/actions/productAction";
 import DetailTop from "./DetailTop";
 import DetailOverview from "./DetailOverview";
 import Loading from "./../../components/Loading";
 
-const ProductDetail = (props) => {
+const ProductDetail = ({ listProduct, fetchProduct }) => {
 	// window.scroll(0, 0);
 	const { id } = useParams();
-	const {
-		detailProduct: { data, loading },
-	} = useSelector((state) => state);
-	const dispatch = useDispatch();
-
 	useEffect(() => {
-		dispatch(findProduct(id));
-	}, [dispatch]);
+		fetchProduct(id);
+	}, []);
+
+	const { data, loading } = listProduct;
 
 	if (loading) {
 		return <Loading />;
 	} else {
+		const detailProduct = data.find((prd) => prd._id === id);
 		return (
 			<>
 				<div className="main bgr">
@@ -36,13 +32,13 @@ const ProductDetail = (props) => {
 									</li>
 									<span className="break">/</span>
 									<li className="breadcrumb-list__item">
-										{data.name}
+										{detailProduct.name}
 									</li>
 								</ul>
 							</div>
 
-							<DetailTop product={data} />
-							<DetailOverview product={data} />
+							<DetailTop product={detailProduct} />
+							<DetailOverview product={detailProduct} />
 						</div>
 					</div>
 				</div>
@@ -51,8 +47,14 @@ const ProductDetail = (props) => {
 	}
 };
 
-// ProductDetail.propTypes = {
+const mapStateToProps = (state) => {
+	return {
+		listProduct: state.products,
+	};
+};
 
-// }
+const mapActionToProps = {
+	fetchProduct,
+};
 
-export default ProductDetail;
+export default connect(mapStateToProps, mapActionToProps)(ProductDetail);

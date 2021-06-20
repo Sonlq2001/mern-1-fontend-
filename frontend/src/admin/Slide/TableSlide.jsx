@@ -1,10 +1,7 @@
 import React from "react";
 // import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
 
-import EmptyTable from "./../EmptyTable";
-import Loading from "./../../components/Loading";
 const TableSlide = ({ data, handleRemove }) => {
 	return (
 		<>
@@ -31,15 +28,15 @@ const TableSlide = ({ data, handleRemove }) => {
 								/>
 							</td>
 							<td>{slide.path}</td>
-							<td>
+							<td className="d-flex">
 								<Link
 									to={`/admin/edit-slide/${slide._id}`}
-									className="btn btn-primary me-3"
+									className="btn btn-primary me-3 fs-5"
 								>
 									Sửa
 								</Link>
 								<button
-									className="btn btn-danger"
+									className="btn btn-danger fs-5"
 									onClick={() => handleRemove(slide._id)}
 								>
 									Xóa

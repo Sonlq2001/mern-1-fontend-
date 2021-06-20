@@ -1,3 +1,6 @@
+@import "./../abstracts/variables";
+@import "./../abstracts/mixins";
+
 .box-product {
 	border: 1px solid #aaa;
 	padding: 1rem;
@@ -36,6 +39,10 @@
 				weight: 700;
 			}
 			color: $red-color;
+
+			@include mobile {
+				margin-top: 0;
+			}
 		}
 	}
 
@@ -96,9 +103,9 @@
 		}
 	}
 
-	&:hover .box-detail {
-		display: block;
-	}
+	// &:hover .box-detail {
+	// 	display: block;
+	// }
 	// .active {
 	// 	display: block;
 	// }

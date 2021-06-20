@@ -34,9 +34,23 @@ const subCategoryReducer = (state = initialState, action) => {
 			return {
 				...state,
 				data: state.data.map((subCate) =>
-					subCate._id == payload._id ? payload : subCate
+					subCate._id === payload._id ? payload : subCate
 				),
 			};
+
+		case typeAction.SET_CHECKBOX:
+			return {
+				...state,
+				data: state.data.map((subCate) => {
+					if (subCate._id === payload) {
+						subCate.select = action.checked;
+						return subCate;
+					} else {
+						return subCate;
+					}
+				}),
+			};
+
 		default:
 			return state;
 	}

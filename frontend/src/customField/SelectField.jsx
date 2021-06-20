@@ -1,14 +1,15 @@
 import React from "react";
-import PropTypes from "prop-types";
 
 import Select from "react-select";
 import { ErrorMessage, useField } from "formik";
 
 const SelectField = (props) => {
 	const { label, name, options, classLabel } = props;
-	const [field, meta] = useField(props);
+	const [field] = useField(props);
 
-	const valueSelected = options.find((option) => option.value == field.value);
+	const valueSelected = options.find(
+		(option) => option.value === field.value
+	);
 
 	const optionChange = (selected) => {
 		const option = selected ? selected.value : selected;

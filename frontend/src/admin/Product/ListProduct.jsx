@@ -1,98 +1,115 @@
-import React, { useEffect } from "react";
-// import PropTypes from "prop-types";
-import { Link, useHistory } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
 
 import {
 	fetchProduct,
 	removeProduct,
+	filterCate,
 } from "./../../redux/actions/productAction";
 import { fetchCategory } from "./../../redux/actions/categoryAction";
 
+import HeaderTable from "./../common/HeaderTable";
 import TableProduct from "./TableProduct";
 import Loading from "./../../components/Loading";
-const ListProduct = (props) => {
-	const history = useHistory();
-	const dispatch = useDispatch();
-	const { products, categories } = useSelector((state) => state);
+import PaginationList from "./../common/PaginationList";
+import NotFoundAdmin from "./../common/NotFoundAdmin";
 
+const ListProduct = ({
+	listProduct,
+	fetchProduct,
+	removeProduct,
+	filterCate,
+	listCategory,
+	fetchCategory,
+}) => {
+	const [currentPage, setCurrentPage] = useState(1);
+	const [valueSearch, setValueSearch] = useState("");
+	const [valueSelect, setValueSelect] = useState("");
+
+	const limit = 5;
 	useEffect(() => {
-		dispatch(fetchProduct());
-		dispatch(fetchCategory());
-	}, [dispatch]);
+		fetchProduct();
+		fetchCategory();
+	}, []);
 
-	const { data, loading } = products;
-	const { data: listCate } = categories;
+	const handleSelect = (e) => setValueSelect(e.target.value);
+	useEffect(() => {
+		if (valueSelect !== "") {
+			filterCate(valueSelect);
+		}
+	}, [valueSelect]);
 
+	const { data: dataProduct, loading } = listProduct;
 	if (loading) {
 		return <Loading loading_admin="loading-admin" />;
-	} else if (data.length > 0) {
+	} else if (dataProduct.length > 0) {
+		// pagination
+		const end = currentPage * limit;
+		const start = end - limit;
+		const dataSlice = dataProduct.slice(start, end);
+		const paginate = (pageNumber) => setCurrentPage(pageNumber);
+		const minus = () => setCurrentPage(currentPage - 1);
+		const plus = () => setCurrentPage(currentPage + 1);
+
+		// // xóa
 		const handleRemove = async (id) => {
 			if (window.confirm("Bạn thật sự muốn xóa ?")) {
-				dispatch(removeProduct(id));
+				removeProduct(id);
 			}
 		};
+
+		// filter
+		const handleSearch = (e) => setValueSearch(e.target.value);
+		const listFilter = dataSlice.filter((product) =>
+			product.name.toLowerCase().includes(valueSearch.toLowerCase())
+		);
+
+		// select
+
 		return (
 			<>
-				<div className="row bg-white pt-3">
-					<h4 className="page-title mb-4">Danh sách sản phẩm</h4>
-
-					<div className="row">
-						<div className="col col-lg-2">
-							<input
-								type="text"
-								className="form-control "
-								placeholder="Tìm kiếm"
-							/>
-						</div>
-						<div className="col col-lg-2">
-							{/* <select
-								className="form-select"
-								aria-label="Default select example"
-								value={""}
-							>
-								<option value="" selected>
-									Xắp xếp theo
-								</option>
-								<option key={1} value={1}>
-									One
-								</option>
-							</select> */}
-						</div>
-						<div className="col col-lg-8 text-end">
-							<Link
-								to="/admin/add-product"
-								className="btn btn-info"
-							>
-								<i className="fas fa-plus"></i>Thêm
-							</Link>
-						</div>
-					</div>
-				</div>
-				<div className="row bg-white">
+				<HeaderTable
+					title="Danh sách sản phẩm"
+					path="/admin/add-product"
+					handleSearch={handleSearch}
+					handleSelect={handleSelect}
+					data={listCategory.data}
+				/>
+				<div className="row bg-white fs-5">
 					<div className="col col-lg-12">
-						{/* <div className="card-body">
-							<h5 className="card-title mb-0">Static Table</h5>
-						</div> */}
-
 						<TableProduct
-							products={data}
-							categories={listCate}
+							dataProduct={listFilter}
 							handleRemove={handleRemove}
 						/>
 					</div>
+					<PaginationList
+						limit={limit}
+						total={dataProduct.length}
+						paginate={paginate}
+						currentPage={currentPage}
+						minus={minus}
+						plus={plus}
+					/>
 				</div>
 			</>
 		);
 	} else {
-		return (
-			<img src="https://hanbaby.vn/wp-content/uploads/2020/12/no-product.jpg" />
-		);
+		return <NotFoundAdmin />;
 	}
 };
 
-// ListProduct.propTypes = {
+const mapStateToProps = (state) => {
+	return {
+		listProduct: state.products,
+		listCategory: state.categories,
+	};
+};
 
-// }
+const mapActionToProps = {
+	fetchProduct,
+	removeProduct,
+	filterCate,
+	fetchCategory,
+};
 
-export default ListProduct;
+export default connect(mapStateToProps, mapActionToProps)(ListProduct);

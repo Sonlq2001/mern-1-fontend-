@@ -1,25 +1,31 @@
 import React from "react";
-import PropTypes from "prop-types";
+// import PropTypes from "prop-types";
 
-const Pagination = (props) => {
+const Pagination = ({ productPerPage, total, paginate }) => {
+	const pageNumber = [];
+
+	for (let i = 1; i < Math.ceil(total / productPerPage); i++) {
+		pageNumber.push(i);
+	}
+
 	return (
 		<>
 			<div className="pagination-group">
 				<ul className="pagination-list">
-					<li className="pagination-item">
-						<a href="" className="pagination-page active">
-							1
-						</a>
-					</li>
+					{pageNumber.map((page) => {
+						return (
+							<li
+								className="pagination-item"
+								key={page}
+								onClick={() => paginate(page)}
+							>
+								<span className="pagination-page">{page}</span>
+							</li>
+						);
+					})}
 
 					<li className="pagination-item">
-						<a href="" className="pagination-page">
-							2
-						</a>
-					</li>
-
-					<li className="pagination-item">
-						<a href="" className="pagination-page">
+						<a href="/#" className="pagination-page">
 							&#187;
 						</a>
 					</li>

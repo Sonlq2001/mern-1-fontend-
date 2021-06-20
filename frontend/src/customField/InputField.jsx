@@ -1,10 +1,18 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { ErrorMessage, useField } from "formik";
 
 const InputField = (props) => {
-	const { label, type, name, placeholder, className, id, classLabel, show } =
-		props;
+	const {
+		label,
+		type,
+		name,
+		placeholder,
+		className,
+		id,
+		classLabel,
+		classError,
+		show,
+	} = props;
 	const [field, meta] = useField(props);
 
 	return (
@@ -28,15 +36,13 @@ const InputField = (props) => {
 				<ErrorMessage
 					component="div"
 					name={name}
-					className="invalid-feedback"
+					className={`invalid-feedback ${
+						classError ? classError : ""
+					}`}
 				/>
 			</div>
 		</>
 	);
 };
-
-// InputField.propTypes = {
-
-// }
 
 export default InputField;

@@ -8,8 +8,10 @@ import Navbar_header from "./Navbar_header";
 function Header(props) {
 	return (
 		<>
-			<div className="container">
-				<Header_top />
+			<div className="group-header">
+				<div className="container">
+					<Header_top />
+				</div>
 			</div>
 			<Navbar_header />
 		</>

@@ -7,6 +7,10 @@ import categoryReducer from "./categoryReducer";
 import { productReducer, detailProductReducer } from "./productReducer";
 import subCategoryReducer from "./subCategoryReducer";
 import commentReducer from "./commentReducer";
+import cartReducer from "./../reducers/cartReducer";
+import userReducer from "./../reducers/userReducer";
+import orderReducer from "./../reducers/orderReducer";
+import orderDetailReducer from "./../reducers/orderDetailReducer";
 
 const rootReducer = combineReducers({
 	slides: slideReducer,
@@ -16,6 +20,10 @@ const rootReducer = combineReducers({
 	subCategories: subCategoryReducer,
 	auth: authenticationReducer,
 	comments: commentReducer,
+	carts: cartReducer,
+	users: userReducer,
+	orders: orderReducer,
+	ordersDetail: orderDetailReducer,
 });
 
 export default rootReducer;

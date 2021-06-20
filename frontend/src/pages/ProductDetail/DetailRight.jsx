@@ -1,22 +1,22 @@
 import React, { useEffect } from "react";
-// import PropTypes from "prop-types";
-import { useDispatch, useSelector } from "react-redux";
-
+import { connect } from "react-redux";
+import { Link, useParams } from "react-router-dom";
 import { fetchProduct } from "./../../redux/actions/productAction";
-import product_1 from "./../../assets/images/product-1.jpg";
 
-const DetailRight = ({ product }) => {
-	const {
-		products: { data },
-	} = useSelector((state) => state);
-	const dispatch = useDispatch();
+const DetailRight = ({ product, listProduct, fetchProduct }) => {
+	const { id } = useParams();
+
 	useEffect(() => {
-		dispatch(fetchProduct());
-	}, [dispatch]);
+		fetchProduct();
+	}, []);
+	const { data } = listProduct;
 
+	const listProductSame = data.filter(
+		(prd) => prd.cateId === product.cateId && prd._id !== id
+	);
 	return (
 		<>
-			<div className="col col-lg-3">
+			<div className="col col-lg-3 col-md-12 col-sm-12 col-12">
 				<div className="product-same">
 					<h4 className="product-same__title">
 						<i className="icon-same-prd fas fa-bars"></i>
@@ -24,7 +24,7 @@ const DetailRight = ({ product }) => {
 					</h4>
 
 					<div className="list-same">
-						{data.map((product, index) => {
+						{listProductSame.map((product, index) => {
 							if (index < 4) {
 								return (
 									<div className="box-same" key={product._id}>
@@ -34,9 +34,12 @@ const DetailRight = ({ product }) => {
 											className="box-same__img"
 										/>
 										<div className="box-same__content">
-											<h5 className="box-same__content-title">
+											<Link
+												to={`/product/${product._id}`}
+												className="box-same__content-title fs-5"
+											>
 												{product.name}
-											</h5>
+											</Link>
 											<span className="box-same__content-price">
 												Giá :{" "}
 												{product.price
@@ -44,11 +47,14 @@ const DetailRight = ({ product }) => {
 													.replace(
 														/\B(?=(\d{3})+(?!\d))/g,
 														"."
-													)}
+													)}{" "}
+												<sup>đ</sup>
 											</span>
 										</div>
 									</div>
 								);
+							} else {
+								return false;
 							}
 						})}
 					</div>
@@ -58,8 +64,10 @@ const DetailRight = ({ product }) => {
 	);
 };
 
-// DetailRight.propTypes = {
+const mapStateToProps = (state) => {
+	return {
+		listProduct: state.products,
+	};
+};
 
-// }
-
-export default DetailRight;
+export default connect(mapStateToProps, { fetchProduct })(DetailRight);

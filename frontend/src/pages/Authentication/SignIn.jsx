@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 // import PropTypes from "prop-types";
 import { useHistory } from "react-router-dom";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { useSelector, useDispatch } from "react-redux";
 
 // import { signIn } from "./../../redux/actions/authenticationAction";
 import userApi from "./../../api/userApi";
@@ -14,19 +13,9 @@ import { authenticate } from "./index";
 
 const SignIn = (props) => {
 	const history = useHistory();
-	const dispatch = useDispatch();
-
 	const [error, setError] = useState("");
 	const [loading, setLoading] = useState(false);
 
-	const { user, message } = useSelector((state) => state.auth);
-
-	// useEffect(() => {
-	// 	if (user) {
-	// 		localStorage.setItem("user", JSON.stringify(user));
-	// 		history.push("/");
-	// 	}
-	// }, [user]);
 	if (loading) {
 		return <Loading />;
 	} else {
@@ -49,7 +38,6 @@ const SignIn = (props) => {
 								setLoading(false);
 								setError(error.response.data.error);
 							}
-							// dispatch(signIn(values));
 						}}
 						validationSchema={Yup.object().shape({
 							email: Yup.string()
@@ -63,19 +51,7 @@ const SignIn = (props) => {
 						{(props) => {
 							return (
 								<>
-									{message && <div>{message}</div>}
 									<Form className="form-input">
-										{/* {success && (
-											<div className="fs-4 alert alert-success">
-												Đăng kí tài khoản thành công !
-												<Link
-													to="/sign-in"
-													className="alert-link"
-												>
-													Đăng nhập
-												</Link>
-											</div>
-										)} */}
 										{error && (
 											<div className="fs-4 alert alert-danger">
 												{error}
@@ -107,7 +83,7 @@ const SignIn = (props) => {
 										</div>
 
 										<div className="form-forgot-pwd">
-											<a href="" className="forgot-pwd">
+											<a href="/#" className="forgot-pwd">
 												Quên mật khẩu
 											</a>
 										</div>

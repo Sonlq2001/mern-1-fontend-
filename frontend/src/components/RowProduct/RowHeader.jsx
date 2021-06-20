@@ -1,15 +1,13 @@
-import React, { useEffect } from "react";
+import React from "react";
 // import PropTypes from "prop-types";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
-import { fetchSubCategory } from "./../../redux/actions/subCategoryAction";
 const RowHeader = ({ category }) => {
 	const { data } = useSelector((state) => state.subCategories);
-	const dispatch = useDispatch();
 
 	const subCateFollowCate = data.filter(
-		(subCate) => subCate.cateId == category._id
+		(subCate) => subCate.cateId === category._id
 	);
 
 	return (
@@ -40,6 +38,8 @@ const RowHeader = ({ category }) => {
 									</Link>
 								</li>
 							);
+						} else {
+							return false;
 						}
 					})}
 				</ul>
