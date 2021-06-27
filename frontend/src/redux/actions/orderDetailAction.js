@@ -13,13 +13,12 @@ export const fetchOrderDetail = () => async (dispatch) => {
 
 export const updateOrderDetail = (id) => async (dispatch) => {
 	try {
-		const result = await orderDetailApi.update(id);
-		// console.log(result);
-		// if (result.status === 200) {
-		// 	dispatch({
-		// 		type: typeAction.UPDATE_STATUS,
-		// 		payload: id,
-		// 	});
-		// }
+		await orderDetailApi.update(id);
+	} catch (error) {}
+};
+
+export const removeOrderDetail = (id) => async (dispatch) => {
+	try {
+		const { data } = await orderDetailApi.remove(id);
 	} catch (error) {}
 };

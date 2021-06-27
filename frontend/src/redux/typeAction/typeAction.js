@@ -58,6 +58,7 @@ const typeAction = {
 
 	// order
 	LIST_ORDER: "LIST_ORDER",
+	REMOVE_ORDER: "REMOVE_ORDER",
 
 	// order detail
 	LIST_ORDER_DETAIL: "LIST_ORDER_DETAIL",

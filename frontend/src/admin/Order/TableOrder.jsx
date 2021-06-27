@@ -6,15 +6,20 @@ import { connect } from "react-redux";
 import {
 	fetchOrderDetail,
 	updateOrderDetail,
+	removeOrderDetail,
 } from "./../../redux/actions/orderDetailAction";
+
+import { removeOrder } from "./../../redux/actions/orderAction";
 
 const TableOrder = ({
 	listOrdered,
 	listOrderDetail,
 	fetchOrderDetail,
 	updateOrderDetail,
+	removeOrder,
+	removeOrderDetail,
 }) => {
-	const [status, setStatus] = useState(false);
+	// const [status, setStatus] = useState(false);
 	useEffect(() => {
 		fetchOrderDetail();
 	}, []);
@@ -22,22 +27,15 @@ const TableOrder = ({
 	const { data: dataOrderDetail, loading } = listOrderDetail;
 
 	// remove order
-	const removeOrder = (id) => {
-		const ordered = dataOrderDetail.filter(
-			(orderDetail) => orderDetail.orderId === id
-		);
-
-		const idsRemove = ordered.map((orderDetail) => {
-			return {
-				orderId: orderDetail.orderId,
-			};
-		});
-		console.log(idsRemove);
+	const handleRemoveOrder = (id) => {
+		if (window.confirm("Bạn thực sự muốn xóa !")) {
+			removeOrder(id);
+			removeOrderDetail(id);
+		}
 	};
 
 	// update status
 	const updateStatus = (id) => {
-		setStatus(true);
 		updateOrderDetail(id);
 	};
 
@@ -103,7 +101,7 @@ const TableOrder = ({
 										<button
 											className="btn btn-danger"
 											onClick={() =>
-												removeOrder(order._id)
+												handleRemoveOrder(order._id)
 											}
 										>
 											Xóa
@@ -136,6 +134,8 @@ const mapStateToProps = (state) => {
 const mapActionToProps = {
 	fetchOrderDetail,
 	updateOrderDetail,
+	removeOrder,
+	removeOrderDetail,
 };
 
 export default connect(mapStateToProps, mapActionToProps)(TableOrder);

@@ -10,3 +10,13 @@ export const fetchOrder = () => async (dispatch) => {
 		});
 	} catch (error) {}
 };
+
+export const removeOrder = (id) => async (dispatch) => {
+	try {
+		const { data } = await orderApi.remove(id);
+		dispatch({
+			type: typeAction.REMOVE_ORDER,
+			payload: id,
+		});
+	} catch (error) {}
+};

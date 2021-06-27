@@ -1,5 +1,9 @@
 import { axiosClient } from "./axiosClient";
 
+import { isAuthenticated } from "./../pages/Authentication/index";
+
+const { user, token } = isAuthenticated();
+
 const orderDetailApi = {
 	getAll() {
 		const url = `order-detail`;
@@ -12,8 +16,19 @@ const orderDetailApi = {
 	},
 
 	update(id) {
-		const url = `/update-order-detail/${id}`;
-		return axiosClient.put(url);
+		const url = `/update-order-detail/${id}/${user._id}`;
+		return axiosClient.put(
+			url,
+			{},
+			{
+				headers: { Authorization: `Bearer ${token}` },
+			}
+		);
+	},
+
+	remove(id) {
+		const url = `/delete-order-detail/${id}`;
+		return axiosClient.delete(url);
 	},
 };
 
